@@ -1,26 +1,346 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+ * Design system TOUBA MOURIDE TRADING
+ * Couleurs issues du logo : turquoise du sac, noir du nom, frise dorée.
+ * Contrastes vérifiés (WCAG AA) :
+ *  - texte noir sur turquoise 500 : 8.4:1 (boutons principaux)
+ *  - turquoise 700 sur blanc : 5.3:1 (liens)
+ *  - gris texte sur blanc : 5.5:1
+ */
+@theme {
+  --color-brand-50: #eafafd;
+  --color-brand-100: #cdf2fa;
+  --color-brand-200: #9fe6f5;
+  --color-brand-300: #62d5ee;
+  --color-brand-400: #2cc6e6;
+  --color-brand-500: #0fbddf;
+  --color-brand-600: #0b9dba;
+  --color-brand-700: #06768d;
+  --color-brand-800: #075e70;
+  --color-brand-900: #073f4b;
+
+  --color-ink: #111111;
+  --color-ink-soft: #2a2e33;
+  --color-paper: #f7f8fa;
+  --color-line: #e6e8ec;
+  --color-muted: #626a73;
+
+  --color-gold: #d7b56d;
+  --color-gold-bright: #e2bc52;
+  --color-gold-deep: #8a6a1f;
+  --color-amber: #f2a93b;
+
+  --color-success: #1d7a46;
+  --color-warning: #8a5a00;
+  --color-danger: #b42318;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-card: 1.25rem;
+
+  --shadow-soft: 0 1px 2px rgb(17 17 17 / 0.04), 0 8px 24px -12px rgb(17 17 17 / 0.12);
+  --shadow-lift: 0 2px 4px rgb(17 17 17 / 0.05), 0 18px 40px -18px rgb(7 63 75 / 0.28);
+
+  --animate-marquee: marquee 38s linear infinite;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  :root {
+    color-scheme: light;
+    --header-height: 4.25rem;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: calc(var(--header-height) + 1rem);
+  }
+
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-brand-700);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  ::selection {
+    background: var(--color-brand-200);
+    color: var(--color-ink);
+  }
+}
+
+@layer components {
+  .container-page {
+    width: 100%;
+    max-width: 80rem;
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+  @media (min-width: 640px) {
+    .container-page {
+      padding-inline: 1.5rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .container-page {
+      padding-inline: 2rem;
+    }
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.875rem;
+    padding: 0.7rem 1.35rem;
+    border-radius: 999px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.9375rem;
+    letter-spacing: 0.01em;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease,
+      border-color 0.2s ease,
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+  .btn:disabled,
+  .btn[aria-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+  .btn-primary {
+    background: var(--color-brand-500);
+    color: var(--color-ink);
+  }
+  .btn-primary:hover:not(:disabled) {
+    background: var(--color-brand-400);
+    box-shadow: var(--shadow-lift);
+  }
+  .btn-dark {
+    background: var(--color-ink);
+    color: #fff;
+  }
+  .btn-dark:hover:not(:disabled) {
+    background: var(--color-ink-soft);
+  }
+  .btn-outline {
+    border: 1.5px solid var(--color-ink);
+    color: var(--color-ink);
+    background: transparent;
+  }
+  .btn-outline:hover:not(:disabled) {
+    background: var(--color-ink);
+    color: #fff;
+  }
+  .btn-whatsapp {
+    background: #117a3d;
+    color: #fff;
+  }
+  .btn-whatsapp:hover:not(:disabled) {
+    background: #0d6331;
+  }
+  .btn-ghost-light {
+    border: 1.5px solid rgb(255 255 255 / 0.7);
+    color: #fff;
+  }
+  .btn-ghost-light:hover {
+    background: #fff;
+    color: var(--color-ink);
+  }
+
+  .field-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 0.375rem;
+    color: var(--color-ink);
+  }
+  .field {
+    width: 100%;
+    min-height: 2.875rem;
+    border-radius: 0.875rem;
+    border: 1.5px solid var(--color-line);
+    background: #fff;
+    padding: 0.65rem 0.9rem;
+    font-size: 1rem;
+    color: var(--color-ink);
+    transition:
+      border-color 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+  .field:hover {
+    border-color: #cfd3d9;
+  }
+  .field:focus {
+    outline: none;
+    border-color: var(--color-brand-600);
+    box-shadow: 0 0 0 4px rgb(15 189 223 / 0.18);
+  }
+  .field[aria-invalid="true"] {
+    border-color: var(--color-danger);
+  }
+  .field-error {
+    margin-top: 0.375rem;
+    font-size: 0.8125rem;
+    color: var(--color-danger);
+    font-weight: 500;
+  }
+
+  .eyebrow {
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-brand-700);
+  }
+
+  .card {
+    background: #fff;
+    border-radius: var(--radius-card);
+    border: 1px solid var(--color-line);
+  }
+
+  .link {
+    color: var(--color-brand-700);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 3px;
+  }
+  .link:hover {
+    color: var(--color-brand-800);
+  }
+
+  .prose-shop {
+    line-height: 1.75;
+    color: var(--color-ink-soft);
+  }
+  .prose-shop h2 {
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: var(--color-ink);
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+  .prose-shop p,
+  .prose-shop ul {
+    margin-bottom: 1rem;
+  }
+  .prose-shop ul {
+    list-style: disc;
+    padding-left: 1.25rem;
+  }
+
+  /* Carrousels : défilement horizontal limité à la piste. */
+  .scroller {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 1rem;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .scroller::-webkit-scrollbar {
+    display: none;
+  }
+  .scroller > * {
+    scroll-snap-align: start;
+  }
+
+  /* Révélation au défilement (activée seulement hors écran, côté client). */
+  [data-reveal="pending"] {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  [data-reveal="visible"] {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
+      transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .marquee-track {
+    animation: var(--animate-marquee);
+  }
+  .marquee:hover .marquee-track,
+  .marquee:focus-within .marquee-track,
+  .marquee[data-paused="true"] .marquee-track {
+    animation-play-state: paused;
+  }
+
+  .skeleton {
+    background: linear-gradient(90deg, #eceef1 0%, #f5f6f8 50%, #eceef1 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s ease-in-out infinite;
+  }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .marquee-track {
+    animation: none !important;
+    transform: none !important;
+  }
+  [data-reveal="pending"] {
+    opacity: 1;
+    transform: none;
+  }
 }

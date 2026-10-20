@@ -1,0 +1,17 @@
+import type { Metadata } from "next";
+import "../globals.css";
+import { inter, montserrat } from "../fonts";
+
+export const metadata: Metadata = {
+  title: { default: "Administration", template: "%s · Administration TMT" },
+  robots: { index: false, follow: false },
+  icons: { icon: "/icon.svg" },
+};
+
+export default function AdminRootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="fr" className={`${montserrat.variable} ${inter.variable}`}>
+      <body className="min-h-dvh bg-paper antialiased">{children}</body>
+    </html>
+  );
+}

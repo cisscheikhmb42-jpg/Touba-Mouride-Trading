@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, CheckCircle2, Circle } from "lucide-react";
 import { requireAdmin } from "@/lib/admin/auth";
 import { STATUS_LABELS, STATUS_TONES, formatDateTime } from "@/lib/admin/labels";
 import { formatFCFA } from "@/lib/format";
@@ -22,17 +22,30 @@ type Stats = {
 
 export default async function DashboardPage() {
   const { supabase } = await requireAdmin();
-  const [{ data: stats, error }, { data: recent }] = await Promise.all([
+  const [{ data: stats, error }, { data: recent }, { data: settings }, { data: zones }, { data: cats }] = await Promise.all([
     supabase.rpc("admin_dashboard_stats"),
     supabase
       .from("orders")
       .select("id, order_number, customer_name, status, total, priced_subtotal, has_unpriced_items, created_at")
       .order("created_at", { ascending: false })
       .limit(8),
+    supabase.from("store_settings").select("logo_url, hero_image_url").eq("id", 1).maybeSingle(),
+    supabase.from("delivery_zones").select("fee").eq("is_active", true),
+    supabase.from("categories").select("image_url").eq("is_active", true),
   ]);
   if (error || !stats) return <p className="text-danger">Impossible de charger les statistiques : {error?.message}</p>;
   const s = stats as Stats;
   const awaiting = s.orders_by_status.awaiting_confirmation ?? 0;
+  const checklist = [
+    { done: !!settings?.logo_url, label: "Envoyer le logo officiel", href: "/admin/parametres" },
+    { done: !!settings?.hero_image_url, label: "Ajouter la grande photo de l'accueil", href: "/admin/parametres" },
+    { done: s.products_published > 0, label: "Publier un premier produit", href: "/admin/produits/nouveau" },
+    { done: s.products_total > 0 && s.products_without_image === 0, label: "Ajouter des photos à chaque produit", href: "/admin/produits" },
+    { done: s.products_total > 0 && s.products_without_price === 0, label: "Renseigner les prix (sinon « Prix à confirmer »)", href: "/admin/produits?filtre=sans-prix" },
+    { done: (zones ?? []).length > 0 && (zones ?? []).every((z) => z.fee !== null), label: "Fixer les frais de livraison des zones", href: "/admin/livraison" },
+    { done: (cats ?? []).length > 0 && (cats ?? []).every((c) => c.image_url), label: "Ajouter une image à chaque catégorie", href: "/admin/categories" },
+  ];
+  const remaining = checklist.filter((c) => !c.done).length;
 
   return (
     <div className="space-y-8">
@@ -42,6 +55,29 @@ export default async function DashboardPage() {
         <Link href="/admin/commandes?statut=awaiting_confirmation" className="flex items-center gap-3 rounded-2xl bg-[#fff4de] p-4 font-semibold text-warning">
           <AlertTriangle className="size-5" aria-hidden="true" /> {awaiting} demande(s) de commande en attente de confirmation
         </Link>
+      )}
+
+      {remaining > 0 && (
+        <section aria-labelledby="checklist" className="card p-5 sm:p-6">
+          <h2 id="checklist" className="font-display text-lg font-extrabold">
+            Pour démarrer <span className="text-sm font-semibold text-muted">· {checklist.length - remaining}/{checklist.length} fait</span>
+          </h2>
+          <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+            {checklist.map((c) => (
+              <li key={c.label}>
+                <Link href={c.href} className="flex items-center gap-3 rounded-xl border border-line px-3 py-2.5 text-sm font-semibold hover:border-ink">
+                  {c.done ? (
+                    <CheckCircle2 className="size-5 shrink-0 text-success" aria-hidden="true" />
+                  ) : (
+                    <Circle className="size-5 shrink-0 text-muted" aria-hidden="true" />
+                  )}
+                  <span className={c.done ? "text-muted line-through" : ""}>{c.label}</span>
+                  <span className="sr-only">{c.done ? "(fait)" : "(à faire)"}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
       )}
 
       <section aria-labelledby="stats-products">

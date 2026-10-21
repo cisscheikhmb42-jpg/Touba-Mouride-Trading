@@ -30,6 +30,7 @@ commandes désactivées avec un message clair).
 | [docs/GUIDE-ADMIN.md](docs/GUIDE-ADMIN.md) | Ajouter un produit, des photos, gérer stocks, livraison, commandes |
 | [docs/STOCK-ET-COMMANDES.md](docs/STOCK-ET-COMMANDES.md) | Règle de gestion du stock et fonctionnement WhatsApp |
 | [docs/A-COMPLETER.md](docs/A-COMPLETER.md) | Informations commerciales manquantes et points à valider |
+| [docs/PAIEMENT.md](docs/PAIEMENT.md) | État du paiement en ligne (non actif) et préparation |
 
 ## Scripts
 

@@ -8,6 +8,8 @@ import { I18nProvider } from "@/i18n/client";
 import { CartProvider } from "@/components/cart/cart-provider";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
+import { StoreProvider } from "@/components/layout/store-context";
+import { WhatsAppFloat } from "@/components/layout/whatsapp-float";
 import { getCategories, getStoreSettings } from "@/lib/data/catalog";
 import { SITE_URL } from "@/lib/env";
 
@@ -54,13 +56,16 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
           {dict.common.skipToContent}
         </a>
         <I18nProvider locale={lang} dict={dict}>
-          <CartProvider>
-            <SiteHeader locale={lang} dict={dict} settings={settings} categories={categories} />
-            <main id="contenu" className="flex-1">
-              {children}
-            </main>
-            <SiteFooter locale={lang} dict={dict} settings={settings} categories={categories} />
-          </CartProvider>
+          <StoreProvider value={{ whatsappNumber: settings.whatsapp_number }}>
+            <CartProvider>
+              <SiteHeader locale={lang} dict={dict} settings={settings} categories={categories} />
+              <main id="contenu" className="flex-1">
+                {children}
+              </main>
+              <SiteFooter locale={lang} dict={dict} settings={settings} categories={categories} />
+              <WhatsAppFloat />
+            </CartProvider>
+          </StoreProvider>
         </I18nProvider>
       </body>
     </html>

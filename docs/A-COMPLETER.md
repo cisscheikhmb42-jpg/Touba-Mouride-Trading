@@ -11,10 +11,11 @@
 
 ## Informations commerciales (non inventées, laissées vides)
 - [ ] Prix des produits (sinon « Prix à confirmer »).
-- [ ] Frais et délais de livraison par zone (sinon « à confirmer sur WhatsApp »).
+- [ ] Frais et délais de livraison par zone : Dakar, Keur Massar, autres régions
+      (sinon « à confirmer sur WhatsApp »).
 - [ ] Option de retrait : zone « Retrait » créée **inactive** ; à activer si confirmée.
 - [ ] Horaires d'ouverture.
-- [ ] Moyens de paiement.
+- [ ] Moyens de paiement (aucun paiement en ligne actif, voir docs/PAIEMENT.md).
 - [ ] Conditions de retour et d'échange.
 - [ ] Facebook / YouTube éventuels (Instagram et TikTok déjà renseignés).
 - [ ] Nom de domaine.

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Check, ShoppingBag } from "lucide-react";
 import { useCart } from "@/components/cart/cart-provider";
@@ -8,11 +8,13 @@ import { useI18n } from "@/i18n/client";
 import { format } from "@/i18n/config";
 import { paths } from "@/i18n/paths";
 import type { Product, ProductVariant } from "@/lib/types";
-import { isOrderable, variantStock } from "@/lib/data/product-utils";
+import { displayPrice, isOrderable, variantStock } from "@/lib/data/product-utils";
+import { formatFCFA } from "@/lib/format";
 import { WhatsAppIcon } from "@/components/ui/icons";
 import { Price } from "./price";
 import { StockBadge } from "./stock-badge";
 import { QuantityStepper } from "./quantity-stepper";
+import { AskPriceButton } from "./ask-price-button";
 
 function variantLabel(v: ProductVariant) {
   return [v.size?.trim(), v.color?.trim()].filter(Boolean).join(" / ");
@@ -38,6 +40,32 @@ export function PurchasePanel({ product, infoHref }: { product: Product; infoHre
     ? Math.max(1, Math.min(99, variant ? variant.stock_quantity : product.stock_quantity))
     : 99;
   const name = locale === "wo" ? product.name_wo || product.name_fr : product.name_fr;
+  // Sans variante choisie : prix « à partir de » calculé sur les variantes réelles.
+  const shown = variant || variants.length === 0 ? { amount: unitPrice, from: false } : displayPrice(product);
+
+  // Barre d'achat fixe sur mobile quand les boutons principaux sont hors écran.
+  const actionsRef = useRef<HTMLDivElement>(null);
+  const [showSticky, setShowSticky] = useState(false);
+  useEffect(() => {
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const el = actionsRef.current;
+      // Visible seulement quand les boutons principaux sont passés au-dessus de l'écran.
+      setShowSticky(!!el && el.getBoundingClientRect().bottom < 0);
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, []);
 
   const addToCart = () => {
     if (variants.length > 0 && !variant) {
@@ -68,9 +96,10 @@ export function PurchasePanel({ product, infoHref }: { product: Product; infoHre
     <div className="space-y-6">
       <div className="flex flex-wrap items-center gap-3">
         <Price
-          amount={unitPrice}
-          compareAt={variant?.price ? null : product.compare_at_price}
-          labels={{ toConfirm: dict.product.priceToConfirm, compareAt: dict.product.compareAt }}
+          amount={shown.amount}
+          from={shown.from}
+          compareAt={variant?.price || shown.from ? null : product.compare_at_price}
+          labels={{ toConfirm: dict.product.priceToConfirm, compareAt: dict.product.compareAt, from: dict.product.from }}
           size="lg"
         />
         <StockBadge state={state} dict={dict} />
@@ -129,7 +158,7 @@ export function PurchasePanel({ product, infoHref }: { product: Product; infoHre
               <p className="mt-2 text-xs text-muted">{format(dict.product.maxStock, { n: max })}</p>
             )}
           </div>
-          <div className="flex flex-col gap-3 sm:flex-row">
+          <div ref={actionsRef} className="flex flex-col gap-3 sm:flex-row">
             <button type="button" onClick={addToCart} disabled={variants.length > 0 && variant !== null && !orderable} className="btn btn-primary flex-1">
               {added ? <Check className="size-5" aria-hidden="true" /> : <ShoppingBag className="size-5" aria-hidden="true" />}
               {added ? dict.product.added : dict.product.addToCart}
@@ -145,9 +174,38 @@ export function PurchasePanel({ product, infoHref }: { product: Product; infoHre
               <WhatsAppIcon /> {dict.product.orderOnWhatsapp}
             </button>
           </div>
+          {shown.amount === null && <AskPriceButton name={name} slug={product.slug} />}
           <p role="status" className="sr-only">
             {added ? `${name} — ${dict.product.added}` : ""}
           </p>
+          {showSticky && (
+            <div className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-white/95 px-4 py-3 shadow-[0_-8px_24px_-12px_rgb(17_17_17/0.25)] backdrop-blur lg:hidden">
+              <div className="mx-auto flex max-w-xl items-center gap-3">
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-bold">{name}</p>
+                  <p className="text-sm font-semibold text-ink-soft">
+                    {shown.amount !== null ? `${shown.from ? `${dict.product.from} ` : ""}${formatFCFA(shown.amount)}` : dict.product.priceToConfirm}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (variants.length > 0 && !variant) {
+                      actionsRef.current?.scrollIntoView({ block: "center" });
+                      setError(dict.product.chooseVariant);
+                      return;
+                    }
+                    addToCart();
+                  }}
+                  disabled={variants.length > 0 && variant !== null && !orderable}
+                  className="btn btn-primary shrink-0 px-5"
+                >
+                  {added ? <Check className="size-5" aria-hidden="true" /> : <ShoppingBag className="size-5" aria-hidden="true" />}
+                  {added ? dict.product.added : dict.product.addToCart}
+                </button>
+              </div>
+            </div>
+          )}
         </>
       ) : (
         <p className="rounded-2xl bg-paper p-4 text-sm font-medium text-ink-soft">{dict.product.unavailableNotice}</p>
@@ -156,6 +214,7 @@ export function PurchasePanel({ product, infoHref }: { product: Product; infoHre
       <a href={infoHref} target="_blank" rel="noopener noreferrer" className="link inline-flex items-center gap-2 text-sm">
         <WhatsAppIcon className="size-4" /> {dict.product.askOnWhatsapp}
       </a>
+      <p className="text-xs leading-relaxed text-muted">{dict.product.paymentNote}</p>
     </div>
   );
 }

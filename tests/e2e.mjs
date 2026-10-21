@@ -49,13 +49,21 @@ async function step(name, fn) {
 const browser = await chromium.launch();
 const consoleErrors = [];
 let expectAuthFailure = false;
+const prefetch404 = new Set();
 function track(page, label) {
   page.on("console", (m) => {
     // Le refus du mauvais mot de passe (test volontaire) n'est pas une erreur.
-    if (m.type() === "error" && !(label === "admin" && expectAuthFailure)) consoleErrors.push(`${label}: ${m.text()}`);
+    if (m.type() === "error" && !(label === "admin" && expectAuthFailure) && !/status of 404/.test(m.text()))
+      consoleErrors.push(`${label}: ${m.text()}`);
   });
   page.on("pageerror", (e) => consoleErrors.push(`${label}: ${e.message}`));
   page.on("response", (r) => {
+    // Préchargement (?_rsc=) d'une page pas encore générée : Next répond 404
+    // puis charge la page au clic. Vérifié à la fin : la vraie page doit répondre 200.
+    if (r.status() === 404 && r.url().includes("_rsc=")) {
+      prefetch404.add(r.url().split("?")[0]);
+      return;
+    }
     if (r.status() >= 400 && !(expectAuthFailure && r.url().includes("/auth/v1/token"))) consoleErrors.push(`${label}: HTTP ${r.status()} ${r.url().replace(BASE, "")}`);
   });
 }
@@ -114,6 +122,7 @@ await step("Admin : téléverser deux photos (optimisées en WebP)", async () =>
   await admin.locator('input[type="file"]').setInputFiles(files);
   await admin.getByText("test2.jpg : ajoutée").waitFor({ timeout: 30000 });
   await admin.getByText("Monter").first().waitFor();
+  await v(admin.getByRole("button", { name: "Supprimer la photo" })).nth(1).waitFor();
   assert.equal(await v(admin.getByRole("button", { name: "Supprimer la photo" })).count(), 2);
 });
 
@@ -365,6 +374,13 @@ await step("prefers-reduced-motion : bandeau défilant immobile", async () => {
   const anim = await p.locator(".marquee-track").first().evaluate((el) => getComputedStyle(el).animationName);
   assert.equal(anim, "none");
   await p.close();
+});
+
+await step("Préchargements en 404 : les vraies pages répondent 200", async () => {
+  for (const url of prefetch404) {
+    const res = await fetch(url);
+    assert.equal(res.status, 200, `${url} répond ${res.status}`);
+  }
 });
 
 await step("Aucune erreur dans la console", async () => {

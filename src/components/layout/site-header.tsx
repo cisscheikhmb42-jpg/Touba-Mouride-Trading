@@ -12,6 +12,7 @@ import { LanguageSwitcher } from "./language-switcher";
 import { CartButton } from "./cart-button";
 import { SearchForm } from "./search-form";
 import { MobileMenu } from "./mobile-menu";
+import { CategoriesMenu } from "./categories-menu";
 
 export function SiteHeader({
   locale,
@@ -43,6 +44,9 @@ export function SiteHeader({
           </Link>
           <nav aria-label={dict.common.menu} className="ml-8 hidden lg:block">
             <ul className="flex items-center gap-1">
+              <li>
+                <CategoriesMenu categories={categories.map((c) => ({ slug: c.slug, name: pick(c, "name", locale) }))} />
+              </li>
               {nav.map((item) => (
                 <li key={item.href}>
                   <Link href={item.href} className="rounded-full px-3 py-2 font-display text-sm font-bold whitespace-nowrap text-ink-soft transition hover:bg-paper hover:text-ink">
@@ -52,7 +56,7 @@ export function SiteHeader({
               ))}
             </ul>
           </nav>
-          <SearchForm id="header-search" className="mx-auto hidden w-full max-w-xs md:block xl:max-w-sm" />
+          <SearchForm id="header-search" className="mx-auto hidden w-full max-w-xs md:block lg:hidden xl:block xl:max-w-sm" />
           <div className="flex items-center gap-1 sm:gap-2">
             <LanguageSwitcher className="hidden sm:block" />
             <a

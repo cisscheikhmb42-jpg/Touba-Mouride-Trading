@@ -4,6 +4,11 @@ Adresse : `https://<votre-site>/admin` (lien discret « Espace administrateur »
 en bas de chaque page). Connexion avec l'e-mail et le mot de passe créés dans
 Supabase (voir docs/SUPABASE.md § 6).
 
+## Tableau de bord : « Pour démarrer »
+Le tableau de bord affiche la liste de ce qui manque encore (logo, photo de
+l'accueil, produits, photos, prix, frais de livraison, images des catégories).
+Chaque ligne est un lien direct vers la bonne page.
+
 ## Ajouter un produit
 1. **Produits > Ajouter un produit**.
 2. Renseignez le nom (français, et wolof si vous l'avez), la catégorie, la

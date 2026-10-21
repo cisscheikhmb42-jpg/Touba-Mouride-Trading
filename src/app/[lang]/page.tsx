@@ -19,6 +19,8 @@ import { WhatsAppIcon } from "@/components/ui/icons";
 import { CategoryTile } from "@/components/catalog/category-tile";
 import { ProductCard } from "@/components/catalog/product-card";
 import { BrandMarquee } from "@/components/home/brand-marquee";
+import { CollectionCard } from "@/components/home/collection-card";
+import { MessageCircle, BadgeCheck, Truck } from "lucide-react";
 import { JsonLd } from "@/components/seo/json-ld";
 
 export async function generateMetadata({ params }: PageProps<"/[lang]">): Promise<Metadata> {
@@ -38,6 +40,10 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
   const [settings, categories, products] = await Promise.all([getStoreSettings(), getCategories(), getProducts()]);
 
   const featured = products.filter((p) => p.is_featured).slice(0, 12);
+  const collections = ["serigne-souhaibou", "baye-lahad"]
+    .map((slug) => categories.find((c) => c.slug === slug))
+    .filter((c): c is (typeof categories)[number] => Boolean(c));
+  const trustIcons = [MessageCircle, BadgeCheck, Truck];
   const latest = products.slice(0, 12); // déjà triés par date d'ajout décroissante
   const wa = whatsappUrl(settings.whatsapp_number);
   const editorialImages = products.flatMap((p) => p.product_images.slice(0, 1).map((img) => ({ img, p }))).slice(0, 2);
@@ -111,6 +117,26 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
         </div>
       </section>
 
+      {/* ENGAGEMENTS (uniquement des informations vraies) */}
+      <section aria-label={dict.home.brandEyebrow} className="border-y border-line bg-white">
+        <ul className="container-page grid gap-px sm:grid-cols-3">
+          {dict.home.trust.map((item, i) => {
+            const Icon = trustIcons[i] ?? BadgeCheck;
+            return (
+              <li key={item.title} className="flex gap-4 py-6 sm:px-4">
+                <span className="grid size-11 shrink-0 place-items-center rounded-full bg-brand-50 text-brand-700">
+                  <Icon className="size-5" aria-hidden="true" />
+                </span>
+                <span>
+                  <span className="block font-display text-sm font-extrabold">{item.title}</span>
+                  <span className="mt-1 block text-sm leading-relaxed text-muted">{item.text}</span>
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+
       {/* CATÉGORIES */}
       {categories.length > 0 && (
         <section aria-labelledby="home-categories" className="container-page py-16 sm:py-20">
@@ -182,6 +208,33 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
             </Reveal>
           </section>
         </>
+      )}
+
+      {/* COLLECTIONS */}
+      {collections.length > 0 && (
+        <section aria-labelledby="home-collections" className="container-page pt-16 sm:pt-24">
+          <Reveal>
+            <SectionHeading
+              id="home-collections"
+              eyebrow={dict.home.collectionsEyebrow}
+              title={dict.home.collectionsTitle}
+              subtitle={dict.home.collectionsSubtitle}
+            />
+          </Reveal>
+          <div className="grid gap-5 lg:grid-cols-2">
+            {collections.map((c, i) => (
+              <Reveal key={c.id} delay={i * 120}>
+                <CollectionCard
+                  category={c}
+                  locale={locale}
+                  eyebrow={dict.home.collectionsEyebrow}
+                  cta={dict.home.collectionsCta}
+                  tone={i === 0 ? "dark" : "brand"}
+                />
+              </Reveal>
+            ))}
+          </div>
+        </section>
       )}
 
       {/* ÉDITORIAL */}

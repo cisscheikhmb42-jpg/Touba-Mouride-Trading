@@ -547,6 +547,7 @@ function CheckoutForm({
           {submitting ? <Loader2 className="size-5 animate-spin" aria-hidden="true" /> : <WhatsAppIcon />}
           {submitting ? t.submitting : t.submit}
         </button>
+        <p className="text-xs leading-relaxed text-muted">{dict.product.paymentNote}</p>
         <p className="text-xs leading-relaxed text-muted">
           {t.privacy}{" "}
           <Link href={paths.privacy(locale)} className="link">

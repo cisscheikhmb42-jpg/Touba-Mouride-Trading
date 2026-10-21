@@ -10,6 +10,8 @@ import { Price } from "./price";
 import { StockBadge } from "./stock-badge";
 import { ImagePlaceholder } from "./image-placeholder";
 import { QuickAddButton } from "./quick-add-button";
+import { AskPriceButton } from "./ask-price-button";
+import { format } from "@/i18n/config";
 
 export function ProductCard({
   product,
@@ -57,12 +59,18 @@ export function ProductCard({
             {name}
           </Link>
         </h3>
+        {product.product_variants.some((v) => v.is_available) && (
+          <p className="text-xs text-muted">
+            {format(dict.product.optionsCount, { n: product.product_variants.filter((v) => v.is_available).length })}
+          </p>
+        )}
         <Price
           amount={price.amount}
           compareAt={price.from ? null : product.compare_at_price}
           from={price.from}
           labels={{ toConfirm: dict.product.priceToConfirm, compareAt: dict.product.compareAt, from: dict.product.from }}
         />
+        {price.amount === null && <AskPriceButton name={name} slug={product.slug} variant="link" />}
         <div className="mt-auto flex items-center justify-between gap-2 pt-2">
           <StockBadge state={state} dict={dict} />
           {canQuickAdd ? (

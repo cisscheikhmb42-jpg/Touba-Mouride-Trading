@@ -28,7 +28,7 @@ export function AskPriceButton({
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        className="relative z-10 inline-flex items-center gap-1.5 text-xs font-bold text-[#117a3d] hover:underline"
+        className="relative z-10 inline-flex items-center gap-1.5 text-xs font-bold text-brand-700 hover:underline"
       >
         <WhatsAppIcon className="size-3.5" /> {dict.product.askPrice}
       </a>

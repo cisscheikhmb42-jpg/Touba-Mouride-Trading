@@ -14,7 +14,7 @@ import { Carousel } from "@/components/ui/carousel";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { FaqList } from "@/components/ui/faq-list";
-import { BagMark, EightPointStar, StarFrieze } from "@/components/ui/ornament";
+import { BagMark, StarFrieze } from "@/components/ui/ornament";
 import { WhatsAppIcon } from "@/components/ui/icons";
 import { CategoryTile } from "@/components/catalog/category-tile";
 import { ProductCard } from "@/components/catalog/product-card";
@@ -341,9 +341,9 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
 }
 
 /**
- * Visuel du héro, inspiré du logo : carte blanche, sac turquoise, textes noirs.
+ * Visuel du héro : carte blanche avec le logo officiel (sac et mosquée).
  * Si une photo d'accueil est envoyée dans l'administration, elle s'affiche
- * dans le sac.
+ * sous le logo.
  */
 function HeroVisual({
   image,
@@ -360,30 +360,31 @@ function HeroVisual({
 }) {
   return (
     <div className="relative mx-auto w-full max-w-md lg:max-w-none">
-      <div className="rounded-[2.25rem] border border-line bg-white p-6 shadow-[0_30px_80px_-40px_rgb(7_63_75/0.45)] sm:p-8">
-        {/* Anse du sac */}
-        <div aria-hidden="true" className="mx-auto h-14 w-28 rounded-t-full border-[7px] border-b-0 border-brand-500 sm:h-16 sm:w-32" />
-        {/* Corps du sac */}
-        <div className="relative -mt-1 overflow-hidden rounded-[1.75rem] bg-brand-500">
-          {image ? (
-            <div className="relative aspect-[4/5]">
-              <Image src={image} alt={alt} fill priority sizes="(min-width: 1024px) 40vw, 100vw" quality={85} className="object-cover" />
-            </div>
-          ) : (
-            <div className="px-7 pt-14 pb-8 sm:px-9 sm:pt-16 sm:pb-10">
-              <EightPointStar className="size-7 text-ink" />
-              <p className="mt-5 text-2xl leading-tight font-extrabold tracking-wide text-ink uppercase sm:text-[1.7rem]">{name}</p>
-              <StarFrieze className="mt-4" count={4} tone="ink" />
-              <p className="mt-4 text-sm font-semibold text-ink/75">{locations.join(" · ")}</p>
-              <ul className="mt-6 flex flex-wrap gap-2">
-                {categories.map((c) => (
-                  <li key={c} className="rounded-full border border-ink/25 bg-white/35 px-3 py-1.5 text-xs font-bold text-ink">
-                    {c}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+      <div className="overflow-hidden rounded-[2.25rem] border border-line bg-white shadow-[0_30px_80px_-40px_rgb(7_63_75/0.45)]">
+        {image ? (
+          <div className="relative aspect-[4/3] bg-brand-50">
+            <Image src={image} alt={alt} fill priority sizes="(min-width: 1024px) 40vw, 100vw" quality={85} className="object-cover" />
+          </div>
+        ) : null}
+        <div className="flex flex-col items-center px-7 py-10 text-center sm:px-10 sm:py-12">
+          <Image
+            src="/brand/logo-mark.png"
+            alt={`Logo ${name}`}
+            width={236}
+            height={293}
+            priority={!image}
+            className={`${image ? "h-24" : "h-40 sm:h-48"} w-auto`}
+          />
+          <p className="mt-7 text-2xl leading-tight font-extrabold tracking-wide text-ink uppercase sm:text-[1.75rem]">{name}</p>
+          <StarFrieze className="mt-4" count={4} />
+          <p className="mt-4 text-sm font-semibold text-muted">{locations.join(" · ")}</p>
+          <ul className="mt-7 flex flex-wrap justify-center gap-2">
+            {categories.map((c) => (
+              <li key={c} className="rounded-full bg-brand-50 px-3.5 py-1.5 text-xs font-bold text-brand-800">
+                {c}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </div>

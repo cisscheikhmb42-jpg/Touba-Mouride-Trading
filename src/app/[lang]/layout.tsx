@@ -36,7 +36,6 @@ export async function generateMetadata({ params }: LayoutProps<"/[lang]">): Prom
     description,
     applicationName: settings.business_name,
     formatDetection: { telephone: false },
-    icons: { icon: "/icon.svg" },
   };
 }
 

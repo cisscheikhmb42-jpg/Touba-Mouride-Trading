@@ -63,7 +63,7 @@ export function SiteHeader({
               href={wa}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden items-center gap-2 rounded-full bg-[#117a3d] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[#0d6331] xl:inline-flex"
+              className="hidden items-center gap-2 rounded-full bg-brand-700 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-brand-800 xl:inline-flex"
             >
               <WhatsAppIcon className="size-4" /> {dict.common.whatsapp}
             </a>
@@ -72,7 +72,7 @@ export function SiteHeader({
               target="_blank"
               rel="noopener noreferrer"
               aria-label={dict.common.contactOnWhatsapp}
-              className="grid size-11 place-items-center rounded-full text-[#117a3d] hover:bg-brand-50 xl:hidden"
+              className="grid size-11 place-items-center rounded-full text-brand-700 hover:bg-brand-50 xl:hidden"
             >
               <WhatsAppIcon className="size-6" />
             </a>

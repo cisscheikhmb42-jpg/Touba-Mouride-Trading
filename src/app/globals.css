@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /*
- * Design system TOUBA MOURIDE TRADING
+ * Design system TOUBA MOURIDE TRADING — bleu et blanc uniquement.
  * Couleurs issues du logo : turquoise du sac, noir du nom, frise dorée.
  * Contrastes vérifiés (WCAG AA) :
  *  - texte noir sur turquoise 500 : 8.4:1 (boutons principaux)
@@ -20,16 +20,16 @@
   --color-brand-800: #075e70;
   --color-brand-900: #073f4b;
 
-  --color-ink: #111111;
-  --color-ink-soft: #2a2e33;
-  --color-paper: #f7f8fa;
-  --color-line: #e6e8ec;
-  --color-muted: #626a73;
+  --color-ink: #0b2a33; /* bleu très profond : textes et surfaces sombres */
+  --color-ink-soft: #24444d;
+  --color-paper: #f5fafb;
+  --color-line: #e2eef1;
+  --color-muted: #4f6a73;
 
-  --color-gold: #d7b56d;
-  --color-gold-bright: #e2bc52;
-  --color-gold-deep: #8a6a1f;
-  --color-amber: #f2a93b;
+  --color-gold: #2cc6e6;
+  --color-gold-bright: #0fbddf; /* la frise du logo, en turquoise */
+  --color-gold-deep: #06768d;
+  --color-amber: #0fbddf;
 
   --color-success: #1d7a46;
   --color-warning: #8a5a00;
@@ -161,20 +161,20 @@
     background: var(--color-ink-soft);
   }
   .btn-outline {
-    border: 1.5px solid var(--color-ink);
-    color: var(--color-ink);
+    border: 1.5px solid var(--color-brand-700);
+    color: var(--color-brand-800);
     background: transparent;
   }
   .btn-outline:hover:not(:disabled) {
-    background: var(--color-ink);
+    background: var(--color-brand-700);
     color: #fff;
   }
   .btn-whatsapp {
-    background: #117a3d;
+    background: var(--color-brand-700);
     color: #fff;
   }
   .btn-whatsapp:hover:not(:disabled) {
-    background: #0d6331;
+    background: var(--color-brand-800);
   }
   .btn-ghost-light {
     border: 1.5px solid rgb(255 255 255 / 0.7);

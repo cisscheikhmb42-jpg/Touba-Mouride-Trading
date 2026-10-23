@@ -47,7 +47,7 @@ export function EightPointStar({ className = "" }: { className?: string }) {
 
 /** Silhouette du sac du logo (sans le minaret, qui appartient au logo officiel). */
 export function BagMark({ className = "", tone = "brand" }: { className?: string; tone?: "brand" | "ink" }) {
-  const color = tone === "brand" ? "#0fbddf" : "#111111";
+  const color = tone === "brand" ? "#0fbddf" : "#0b2a33";
   return (
     <svg viewBox="0 0 48 56" aria-hidden="true" className={className}>
       <path d="M15 17V14a9 9 0 0 1 18 0v3" fill="none" stroke={color} strokeWidth="4" strokeLinecap="round" />

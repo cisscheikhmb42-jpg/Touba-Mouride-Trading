@@ -5,7 +5,6 @@ import { jakarta } from "../fonts";
 export const metadata: Metadata = {
   title: { default: "Administration", template: "%s · Administration TMT" },
   robots: { index: false, follow: false },
-  icons: { icon: "/icon.svg" },
 };
 
 export default function AdminRootLayout({ children }: { children: React.ReactNode }) {

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Mail, MapPin, Phone } from "lucide-react";
+import { ArrowRight, BadgeCheck, Mail, MapPin, MessageCircle, Phone, Truck } from "lucide-react";
 import { isLocale, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { paths } from "@/i18n/paths";
@@ -14,13 +14,10 @@ import { Carousel } from "@/components/ui/carousel";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { FaqList } from "@/components/ui/faq-list";
-import { EightPointStar, PatternBackground, StarFrieze } from "@/components/ui/ornament";
+import { BagMark, EightPointStar, StarFrieze } from "@/components/ui/ornament";
 import { WhatsAppIcon } from "@/components/ui/icons";
 import { CategoryTile } from "@/components/catalog/category-tile";
 import { ProductCard } from "@/components/catalog/product-card";
-import { BrandMarquee } from "@/components/home/brand-marquee";
-import { CollectionCard } from "@/components/home/collection-card";
-import { MessageCircle, BadgeCheck, Truck } from "lucide-react";
 import { JsonLd } from "@/components/seo/json-ld";
 
 export async function generateMetadata({ params }: PageProps<"/[lang]">): Promise<Metadata> {
@@ -33,6 +30,8 @@ export async function generateMetadata({ params }: PageProps<"/[lang]">): Promis
   };
 }
 
+const TRUST_ICONS = [MessageCircle, BadgeCheck, Truck];
+
 export default async function HomePage({ params }: PageProps<"/[lang]">) {
   const { lang } = await params;
   const locale: Locale = isLocale(lang) ? lang : "fr";
@@ -40,10 +39,6 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
   const [settings, categories, products] = await Promise.all([getStoreSettings(), getCategories(), getProducts()]);
 
   const featured = products.filter((p) => p.is_featured).slice(0, 12);
-  const collections = ["serigne-souhaibou", "baye-lahad"]
-    .map((slug) => categories.find((c) => c.slug === slug))
-    .filter((c): c is (typeof categories)[number] => Boolean(c));
-  const trustIcons = [MessageCircle, BadgeCheck, Truck];
   const latest = products.slice(0, 12); // déjà triés par date d'ajout décroissante
   const wa = whatsappUrl(settings.whatsapp_number);
   const editorialImages = products.flatMap((p) => p.product_images.slice(0, 1).map((img) => ({ img, p }))).slice(0, 2);
@@ -82,24 +77,28 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
 
       {/* HÉRO */}
       <section className="relative overflow-hidden bg-white">
-        <PatternBackground className="text-brand-100" />
-        <div className="container-page relative grid items-center gap-10 py-12 sm:py-16 lg:grid-cols-[1.1fr_0.9fr] lg:py-20">
+        {/* Halo turquoise très doux, rappel de la couleur du sac du logo */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -top-40 right-[-10rem] size-[38rem] rounded-full bg-brand-100/60 blur-3xl"
+        />
+        <div className="container-page relative grid items-center gap-12 py-14 sm:py-20 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16 lg:py-24">
           <div>
             <p className="eyebrow">{dict.hero.eyebrow}</p>
-            <h1 className="mt-4 text-[2.35rem] leading-[1.05] font-extrabold text-ink sm:text-5xl lg:text-[3.6rem]">
+            <h1 className="mt-5 text-[2.5rem] leading-[1.04] font-extrabold tracking-[-0.025em] text-ink sm:text-[3.4rem] lg:text-[4rem]">
               {dict.hero.title}
             </h1>
-            <StarFrieze count={5} className="mt-6" />
-            <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted">{dict.hero.subtitle}</p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link href={paths.shop(locale)} className="btn btn-primary">
+            <StarFrieze count={5} className="mt-7" />
+            <p className="mt-7 max-w-xl text-lg leading-relaxed text-muted">{dict.hero.subtitle}</p>
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+              <Link href={paths.shop(locale)} className="btn btn-primary px-7">
                 {dict.hero.ctaShop} <ArrowRight className="size-4" aria-hidden="true" />
               </Link>
-              <a href={wa} target="_blank" rel="noopener noreferrer" className="btn btn-outline">
+              <a href={wa} target="_blank" rel="noopener noreferrer" className="btn btn-outline px-7">
                 <WhatsAppIcon className="size-5" /> {dict.hero.ctaWhatsapp}
               </a>
             </div>
-            <ul className="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium text-ink-soft">
+            <ul className="mt-9 flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold text-ink-soft">
               {settings.locations.map((loc) => (
                 <li key={loc} className="flex items-center gap-1.5">
                   <MapPin className="size-4 text-brand-700" aria-hidden="true" /> {loc}
@@ -119,16 +118,16 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
 
       {/* ENGAGEMENTS (uniquement des informations vraies) */}
       <section aria-label={dict.home.brandEyebrow} className="border-y border-line bg-white">
-        <ul className="container-page grid gap-px sm:grid-cols-3">
+        <ul className="container-page grid divide-line sm:grid-cols-3 sm:divide-x">
           {dict.home.trust.map((item, i) => {
-            const Icon = trustIcons[i] ?? BadgeCheck;
+            const Icon = TRUST_ICONS[i] ?? BadgeCheck;
             return (
-              <li key={item.title} className="flex gap-4 py-6 sm:px-4">
-                <span className="grid size-11 shrink-0 place-items-center rounded-full bg-brand-50 text-brand-700">
+              <li key={item.title} className="flex gap-4 py-7 sm:px-6 sm:first:pl-0">
+                <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-brand-500 text-ink">
                   <Icon className="size-5" aria-hidden="true" />
                 </span>
                 <span>
-                  <span className="block font-display text-sm font-extrabold">{item.title}</span>
+                  <span className="block text-[0.95rem] font-extrabold">{item.title}</span>
                   <span className="mt-1 block text-sm leading-relaxed text-muted">{item.text}</span>
                 </span>
               </li>
@@ -139,7 +138,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
 
       {/* CATÉGORIES */}
       {categories.length > 0 && (
-        <section aria-labelledby="home-categories" className="container-page py-16 sm:py-20">
+        <section aria-labelledby="home-categories" className="container-page py-20 sm:py-24">
           <Reveal>
             <SectionHeading
               id="home-categories"
@@ -147,7 +146,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
               subtitle={dict.home.categoriesSubtitle}
               action={{ href: paths.shop(locale), label: dict.common.viewAll }}
             />
-            <Carousel label={dict.home.categoriesTitle} itemClassName="w-[64%] sm:w-[38%] lg:w-[23.5%] xl:w-[19%]">
+            <Carousel label={dict.home.categoriesTitle} itemClassName="w-[62%] sm:w-[36%] lg:w-[23.5%] xl:w-[19%]">
               {categories.map((c, i) => (
                 <CategoryTile key={c.id} category={c} locale={locale} index={i} />
               ))}
@@ -156,27 +155,23 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
         </section>
       )}
 
-      <BrandMarquee label={dict.home.marqueeLabel} items={categories.map((c) => pick(c, "name", locale))} />
-
       {/* PRODUITS */}
       {products.length === 0 ? (
-        <section className="container-page py-16 sm:py-20">
-          <div className="card relative overflow-hidden px-6 py-12 text-center sm:px-12">
-            <PatternBackground className="text-brand-50" />
-            <div className="relative mx-auto max-w-xl">
-              <EightPointStar className="mx-auto size-8 text-gold-bright" />
-              <h2 className="mt-4 text-2xl font-extrabold sm:text-3xl">{dict.home.emptyCatalogTitle}</h2>
-              <p className="mt-3 text-muted">{dict.home.emptyCatalogText}</p>
-              <a href={wa} target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp mt-7">
-                <WhatsAppIcon /> {dict.common.contactOnWhatsapp}
-              </a>
-            </div>
+        <section className="container-page pb-20 sm:pb-24">
+          <div className="relative overflow-hidden rounded-[2rem] border border-line bg-white px-6 py-14 text-center sm:px-12">
+            <BagMark className="mx-auto h-16 w-14" />
+            <h2 className="mt-6 text-2xl font-extrabold sm:text-3xl">{dict.home.emptyCatalogTitle}</h2>
+            <StarFrieze className="mx-auto mt-4" count={3} />
+            <p className="mx-auto mt-4 max-w-xl text-muted">{dict.home.emptyCatalogText}</p>
+            <a href={wa} target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp mt-8">
+              <WhatsAppIcon /> {dict.common.contactOnWhatsapp}
+            </a>
           </div>
         </section>
       ) : (
         <>
           {featured.length > 0 && (
-            <section aria-labelledby="home-featured" className="container-page pt-16 sm:pt-20">
+            <section aria-labelledby="home-featured" className="container-page pb-20 sm:pb-24">
               <Reveal>
                 <SectionHeading
                   id="home-featured"
@@ -192,12 +187,12 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
               </Reveal>
             </section>
           )}
-          <section aria-labelledby="home-latest" className="container-page pt-16 sm:pt-20">
+          <section aria-labelledby="home-latest" className="container-page pb-20 sm:pb-24">
             <Reveal>
               <SectionHeading
                 id="home-latest"
-                title={featured.length > 0 ? dict.home.latestTitle : dict.home.discoverTitle}
-                subtitle={featured.length > 0 ? dict.home.latestSubtitle : dict.home.discoverSubtitle}
+                title={dict.home.latestTitle}
+                subtitle={dict.home.latestSubtitle}
                 action={{ href: paths.shop(locale), label: dict.common.viewAll }}
               />
               <Carousel label={dict.home.latestTitle}>
@@ -210,40 +205,13 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
         </>
       )}
 
-      {/* COLLECTIONS */}
-      {collections.length > 0 && (
-        <section aria-labelledby="home-collections" className="container-page pt-16 sm:pt-24">
-          <Reveal>
-            <SectionHeading
-              id="home-collections"
-              eyebrow={dict.home.collectionsEyebrow}
-              title={dict.home.collectionsTitle}
-              subtitle={dict.home.collectionsSubtitle}
-            />
-          </Reveal>
-          <div className="grid gap-5 lg:grid-cols-2">
-            {collections.map((c, i) => (
-              <Reveal key={c.id} delay={i * 120}>
-                <CollectionCard
-                  category={c}
-                  locale={locale}
-                  eyebrow={dict.home.collectionsEyebrow}
-                  cta={dict.home.collectionsCta}
-                  tone={i === 0 ? "dark" : "brand"}
-                />
-              </Reveal>
-            ))}
-          </div>
-        </section>
-      )}
-
       {/* ÉDITORIAL */}
-      <section className="container-page py-16 sm:py-24">
-        <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-14">
+      <section className="bg-white py-20 sm:py-28">
+        <div className="container-page grid items-center gap-10 lg:grid-cols-2 lg:gap-20">
           <Reveal className="grid grid-cols-2 gap-4">
             {settings.hero_video_url ? (
               <video
-                className="col-span-2 aspect-video w-full rounded-[var(--radius-card)] bg-ink object-cover"
+                className="col-span-2 aspect-video w-full rounded-[1.75rem] bg-ink object-cover"
                 src={settings.hero_video_url}
                 controls
                 muted
@@ -256,8 +224,8 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                 <Link
                   key={img.id}
                   href={paths.product(locale, p.slug)}
-                  className={`relative overflow-hidden rounded-[var(--radius-card)] bg-paper ${
-                    editorialImages.length === 1 ? "col-span-2 aspect-[4/3]" : i === 0 ? "aspect-[3/4]" : "mt-10 aspect-[3/4]"
+                  className={`relative overflow-hidden rounded-[1.75rem] bg-paper ${
+                    editorialImages.length === 1 ? "col-span-2 aspect-[4/3]" : i === 0 ? "aspect-[3/4]" : "mt-12 aspect-[3/4]"
                   }`}
                 >
                   <Image
@@ -266,27 +234,28 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                     fill
                     sizes="(min-width: 1024px) 25vw, 50vw"
                     quality={70}
-                    className="object-cover"
+                    className="object-cover transition duration-700 hover:scale-[1.03]"
                   />
                 </Link>
               ))
             ) : (
-              <div className="relative col-span-2 grid aspect-[16/11] place-items-center overflow-hidden rounded-[var(--radius-card)] bg-brand-500">
-                <PatternBackground className="text-white/25" />
-                <div className="relative text-center">
-                  <EightPointStar className="mx-auto size-12 text-white" />
-                  <p className="mt-4 font-display text-2xl font-extrabold tracking-wide text-ink uppercase">
-                    {settings.business_name}
-                  </p>
+              <div className="col-span-2 grid aspect-[16/11] place-items-center rounded-[1.75rem] bg-brand-500">
+                <div className="text-center">
+                  <BagMark className="mx-auto h-28 w-24" tone="ink" />
+                  <p className="mt-6 text-2xl font-extrabold tracking-wide text-ink uppercase">{settings.business_name}</p>
+                  <StarFrieze className="mx-auto mt-4" count={4} />
                 </div>
               </div>
             )}
           </Reveal>
           <Reveal delay={120}>
             <p className="eyebrow">{dict.home.brandEyebrow}</p>
-            <h2 className="mt-3 text-3xl leading-tight font-extrabold sm:text-4xl">{dict.home.editorialTitle}</h2>
-            <p className="mt-5 text-lg leading-relaxed text-muted">{dict.home.editorialText}</p>
-            <Link href={paths.shop(locale)} className="btn btn-dark mt-8">
+            <h2 className="mt-4 text-3xl leading-tight font-extrabold tracking-[-0.02em] sm:text-[2.6rem]">
+              {dict.home.editorialTitle}
+            </h2>
+            <StarFrieze className="mt-6" count={4} />
+            <p className="mt-6 text-lg leading-relaxed text-muted">{dict.home.editorialText}</p>
+            <Link href={paths.shop(locale)} className="btn btn-dark mt-9 px-7">
               {dict.home.editorialCta} <ArrowRight className="size-4" aria-hidden="true" />
             </Link>
           </Reveal>
@@ -294,16 +263,18 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
       </section>
 
       {/* COMMENT COMMANDER */}
-      <section aria-labelledby="home-how" className="bg-white py-16 sm:py-24">
+      <section aria-labelledby="home-how" className="py-20 sm:py-28">
         <div className="container-page">
           <Reveal>
-            <SectionHeading id="home-how" title={dict.home.howTitle} />
+            <SectionHeading id="home-how" eyebrow="WhatsApp" title={dict.home.howTitle} />
           </Reveal>
           <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {dict.home.howSteps.map((step, i) => (
-              <Reveal as="li" key={step.title} delay={i * 90} className="card relative p-6">
-                <span className="font-display text-5xl font-extrabold text-brand-500/90">{String(i + 1).padStart(2, "0")}</span>
-                <h3 className="mt-4 text-lg font-extrabold">{step.title}</h3>
+              <Reveal as="li" key={step.title} delay={i * 90} className="group relative rounded-[1.5rem] border border-line bg-white p-7 transition hover:-translate-y-1 hover:border-brand-500 hover:shadow-[var(--shadow-lift)]">
+                <span className="grid size-12 place-items-center rounded-2xl bg-ink text-lg font-extrabold text-white transition group-hover:bg-brand-500 group-hover:text-ink">
+                  {i + 1}
+                </span>
+                <h3 className="mt-6 text-lg font-extrabold">{step.title}</h3>
                 <p className="mt-2 text-[0.95rem] leading-relaxed text-muted">{step.text}</p>
               </Reveal>
             ))}
@@ -311,19 +282,20 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
         </div>
       </section>
 
-      {/* LA BOUTIQUE */}
-      <section className="relative overflow-hidden bg-brand-500">
-        <PatternBackground className="text-white/20" />
-        <div className="container-page relative grid gap-10 py-16 sm:py-20 lg:grid-cols-[1.2fr_1fr] lg:items-center">
-          <Reveal>
-            <p className="font-display text-xs font-bold tracking-[0.18em] text-ink/80 uppercase">{dict.home.brandEyebrow}</p>
-            <h2 className="mt-3 text-3xl font-extrabold text-ink sm:text-4xl">{dict.home.brandTitle}</h2>
-            <p className="mt-5 max-w-2xl text-lg leading-relaxed text-ink">{dict.home.brandText}</p>
+      {/* LA BOUTIQUE + CONTACT */}
+      <section className="container-page pb-20 sm:pb-28">
+        <div className="grid overflow-hidden rounded-[2rem] bg-brand-500 lg:grid-cols-[1.2fr_1fr]">
+          <Reveal className="relative p-8 sm:p-12 lg:p-14">
+            <BagMark className="absolute -right-12 -bottom-16 h-52 w-44 opacity-10" tone="ink" />
+            <p className="text-xs font-bold tracking-[0.2em] text-ink/80 uppercase">{dict.home.brandEyebrow}</p>
+            <h2 className="mt-4 text-3xl font-extrabold tracking-[-0.02em] text-ink sm:text-4xl">{dict.home.brandTitle}</h2>
+            <StarFrieze className="mt-5" count={4} tone="ink" />
+            <p className="relative mt-6 max-w-2xl text-lg leading-relaxed text-ink">{dict.home.brandText}</p>
           </Reveal>
-          <Reveal delay={120} className="rounded-[var(--radius-card)] bg-ink p-6 text-white sm:p-8">
-            <h3 className="font-display text-xl font-extrabold">{dict.home.contactTitle}</h3>
-            <p className="mt-2 text-sm text-white/75">{dict.home.contactText}</p>
-            <ul className="mt-6 space-y-3 text-[0.95rem]">
+          <Reveal delay={120} className="bg-ink p-8 text-white sm:p-12 lg:p-14">
+            <h3 className="text-xl font-extrabold">{dict.home.contactTitle}</h3>
+            <p className="mt-2 text-sm text-white/70">{dict.home.contactText}</p>
+            <ul className="mt-7 space-y-4 text-[0.95rem]">
               <li>
                 <a href={`tel:${settings.phone_international}`} className="flex items-center gap-3 hover:text-brand-300">
                   <Phone className="size-5 text-brand-400" aria-hidden="true" /> {settings.phone_display}
@@ -342,7 +314,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                 </li>
               ))}
             </ul>
-            <a href={wa} target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp mt-7 w-full">
+            <a href={wa} target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp mt-9 w-full">
               <WhatsAppIcon /> {dict.common.contactOnWhatsapp}
             </a>
           </Reveal>
@@ -350,7 +322,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
       </section>
 
       {/* FAQ */}
-      <section aria-labelledby="home-faq" className="container-page py-16 sm:py-24">
+      <section aria-labelledby="home-faq" className="container-page pb-20 sm:pb-28">
         <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
           <Reveal>
             <SectionHeading
@@ -368,6 +340,11 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
   );
 }
 
+/**
+ * Visuel du héro, inspiré du logo : carte blanche, sac turquoise, textes noirs.
+ * Si une photo d'accueil est envoyée dans l'administration, elle s'affiche
+ * dans le sac.
+ */
 function HeroVisual({
   image,
   alt,
@@ -381,30 +358,33 @@ function HeroVisual({
   locations: string[];
   categories: string[];
 }) {
-  if (image) {
-    return (
-      <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-paper shadow-[var(--shadow-lift)] sm:aspect-[5/5] lg:aspect-[4/5]">
-        <Image src={image} alt={alt} fill priority sizes="(min-width: 1024px) 42vw, 100vw" quality={85} className="object-cover" />
-      </div>
-    );
-  }
-  // Composition graphique (aucune fausse photo de produit).
   return (
-    <div aria-hidden="true" className="relative mx-auto aspect-[4/5] w-full max-w-md overflow-hidden rounded-[2rem] bg-brand-500 shadow-[var(--shadow-lift)]">
-      <PatternBackground className="text-white/25" />
-      <div className="absolute top-8 left-1/2 h-16 w-28 -translate-x-1/2 rounded-t-full border-[6px] border-b-0 border-white/90" />
-      <div className="absolute inset-x-8 top-24 bottom-8 flex flex-col justify-end rounded-[1.5rem] bg-ink/90 p-6 backdrop-blur-sm">
-        <EightPointStar className="size-8 text-gold-bright" />
-        <p className="mt-4 font-display text-2xl leading-tight font-extrabold tracking-wide text-white uppercase">{name}</p>
-        <StarFrieze className="mt-3" count={4} />
-        <p className="mt-3 text-sm text-white/70">{locations.join(" · ")}</p>
-        <ul className="mt-5 flex flex-wrap gap-2">
-          {categories.map((c) => (
-            <li key={c} className="rounded-full border border-white/20 px-3 py-1.5 text-xs font-semibold text-white">
-              {c}
-            </li>
-          ))}
-        </ul>
+    <div className="relative mx-auto w-full max-w-md lg:max-w-none">
+      <div className="rounded-[2.25rem] border border-line bg-white p-6 shadow-[0_30px_80px_-40px_rgb(7_63_75/0.45)] sm:p-8">
+        {/* Anse du sac */}
+        <div aria-hidden="true" className="mx-auto h-14 w-28 rounded-t-full border-[7px] border-b-0 border-brand-500 sm:h-16 sm:w-32" />
+        {/* Corps du sac */}
+        <div className="relative -mt-1 overflow-hidden rounded-[1.75rem] bg-brand-500">
+          {image ? (
+            <div className="relative aspect-[4/5]">
+              <Image src={image} alt={alt} fill priority sizes="(min-width: 1024px) 40vw, 100vw" quality={85} className="object-cover" />
+            </div>
+          ) : (
+            <div className="px-7 pt-14 pb-8 sm:px-9 sm:pt-16 sm:pb-10">
+              <EightPointStar className="size-7 text-ink" />
+              <p className="mt-5 text-2xl leading-tight font-extrabold tracking-wide text-ink uppercase sm:text-[1.7rem]">{name}</p>
+              <StarFrieze className="mt-4" count={4} tone="ink" />
+              <p className="mt-4 text-sm font-semibold text-ink/75">{locations.join(" · ")}</p>
+              <ul className="mt-6 flex flex-wrap gap-2">
+                {categories.map((c) => (
+                  <li key={c} className="rounded-full border border-ink/25 bg-white/35 px-3 py-1.5 text-xs font-bold text-ink">
+                    {c}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

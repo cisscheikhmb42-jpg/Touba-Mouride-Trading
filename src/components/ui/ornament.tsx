@@ -1,58 +1,57 @@
 /**
- * Frise d'étoiles à huit branches, reprise de l'esprit de la frise
- * dorée du logo. Purement décorative.
+ * Ornements inspirés du logo : la frise dorée d'étoiles à huit branches
+ * et le sac turquoise. Purement décoratifs (aria-hidden).
  */
-export function StarFrieze({ count = 4, className = "" }: { count?: number; className?: string }) {
-  const unit = 28;
+
+/** Frise d'étoiles à huit branches reliées par un filet (comme sous le nom du logo). */
+export function StarFrieze({
+  count = 4,
+  className = "",
+  tone = "gold",
+}: {
+  count?: number;
+  className?: string;
+  tone?: "gold" | "ink";
+}) {
+  const unit = 24;
   const width = unit * count;
   return (
     <svg
-      viewBox={`0 0 ${width} 20`}
+      viewBox={`0 0 ${width} 18`}
       width={width}
-      height={20}
+      height={18}
       aria-hidden="true"
-      className={`text-gold-bright ${className}`}
+      className={`${tone === "gold" ? "text-gold-bright" : "text-ink/70"} ${className}`}
       fill="none"
       stroke="currentColor"
-      strokeWidth="1"
+      strokeWidth="1.1"
+      strokeLinejoin="round"
     >
-      <line x1="0" y1="10" x2={width} y2="10" strokeOpacity="0.6" />
-      {Array.from({ length: count }, (_, i) => {
-        const cx = unit * i + unit / 2;
-        return (
-          <g key={i} transform={`translate(${cx} 10)`}>
-            <rect x="-6" y="-6" width="12" height="12" />
-            <rect x="-6" y="-6" width="12" height="12" transform="rotate(45)" />
-            <circle r="2.2" fill="currentColor" stroke="none" />
-          </g>
-        );
-      })}
+      <line x1="0" y1="9" x2={width} y2="9" strokeOpacity="0.55" />
+      {Array.from({ length: count }, (_, i) => (
+        <g key={i} transform={`translate(${unit * i + unit / 2} 9)`}>
+          <polygon points="0.00,-7.00 -1.19,-2.86 -4.95,-4.95 -2.86,-1.19 -7.00,-0.00 -2.86,1.19 -4.95,4.95 -1.19,2.86 -0.00,7.00 1.19,2.86 4.95,4.95 2.86,1.19 7.00,0.00 2.86,-1.19 4.95,-4.95 1.19,-2.86" fill="currentColor" stroke="none" />
+        </g>
+      ))}
     </svg>
   );
 }
 
 export function EightPointStar({ className = "" }: { className?: string }) {
   return (
-    <svg viewBox="-12 -12 24 24" aria-hidden="true" className={className} fill="currentColor">
-      <rect x="-7" y="-7" width="14" height="14" />
-      <rect x="-7" y="-7" width="14" height="14" transform="rotate(45)" />
+    <svg viewBox="-8 -8 16 16" aria-hidden="true" className={className} fill="currentColor">
+      <polygon points="0.00,-7.00 -1.19,-2.86 -4.95,-4.95 -2.86,-1.19 -7.00,-0.00 -2.86,1.19 -4.95,4.95 -1.19,2.86 -0.00,7.00 1.19,2.86 4.95,4.95 2.86,1.19 7.00,0.00 2.86,-1.19 4.95,-4.95 1.19,-2.86" />
     </svg>
   );
 }
 
-/** Motif géométrique très discret pour les fonds de section. */
-export function PatternBackground({ className = "" }: { className?: string }) {
+/** Silhouette du sac du logo (sans le minaret, qui appartient au logo officiel). */
+export function BagMark({ className = "", tone = "brand" }: { className?: string; tone?: "brand" | "ink" }) {
+  const color = tone === "brand" ? "#0fbddf" : "#111111";
   return (
-    <svg aria-hidden="true" className={`pointer-events-none absolute inset-0 h-full w-full ${className}`}>
-      <defs>
-        <pattern id="tmt-stars" width="56" height="56" patternUnits="userSpaceOnUse">
-          <g transform="translate(28 28)" fill="none" stroke="currentColor" strokeWidth="0.8">
-            <rect x="-9" y="-9" width="18" height="18" />
-            <rect x="-9" y="-9" width="18" height="18" transform="rotate(45)" />
-          </g>
-        </pattern>
-      </defs>
-      <rect width="100%" height="100%" fill="url(#tmt-stars)" />
+    <svg viewBox="0 0 48 56" aria-hidden="true" className={className}>
+      <path d="M15 17V14a9 9 0 0 1 18 0v3" fill="none" stroke={color} strokeWidth="4" strokeLinecap="round" />
+      <path d="M6 17h36l-2 34.5a3 3 0 0 1-3 2.5H11a3 3 0 0 1-3-2.5Z" fill={color} />
     </svg>
   );
 }

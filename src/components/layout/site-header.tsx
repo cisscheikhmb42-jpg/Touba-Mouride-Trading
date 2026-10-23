@@ -31,7 +31,7 @@ export function SiteHeader({
   const wa = whatsappUrl(settings.whatsapp_number);
   const nav = [
     { href: paths.shop(locale), label: dict.common.shop },
-    { href: paths.faq(locale), label: dict.common.faq },
+    { href: paths.faq(locale), label: dict.common.faqShort },
     { href: paths.contact(locale), label: dict.common.contact },
   ];
   return (

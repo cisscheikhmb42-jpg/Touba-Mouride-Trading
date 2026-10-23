@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
 import "../globals.css";
-import { inter, montserrat } from "../fonts";
+import { jakarta } from "../fonts";
 import { isLocale, localeTags, locales } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { I18nProvider } from "@/i18n/client";
@@ -47,7 +47,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
   const [settings, categories] = await Promise.all([getStoreSettings(), getCategories()]);
 
   return (
-    <html lang={localeTags[lang].html} className={`${montserrat.variable} ${inter.variable}`}>
+    <html lang={localeTags[lang].html} className={jakarta.variable}>
       <body className="flex min-h-dvh flex-col antialiased">
         <a
           href="#contenu"

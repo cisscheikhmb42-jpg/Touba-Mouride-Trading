@@ -51,8 +51,6 @@ function ProvisionalMark() {
     <svg viewBox="0 0 48 48" aria-hidden="true" className="h-full w-full">
       <path d="M17 14a7 7 0 0 1 14 0" fill="none" stroke="#0fbddf" strokeWidth="3" strokeLinecap="round" />
       <path d="M9 15h30l-1.6 26.2a2 2 0 0 1-2 1.8H12.6a2 2 0 0 1-2-1.8Z" fill="#0fbddf" />
-      <circle cx="17" cy="15" r="1.6" fill="#fff" />
-      <circle cx="31" cy="15" r="1.6" fill="#fff" />
     </svg>
   );
 }

@@ -22,6 +22,7 @@ const wo: Dictionary = {
     home: "Kër gi",
     shop: "Butig bi",
     categories: "Xeet yi",
+    faqShort: "Laaj yi",
     contact: "Jokkoo ak nun",
     faq: "Laaj yi ñuy faral di laaj",
     blog: "Blog",
@@ -67,10 +68,6 @@ const wo: Dictionary = {
     featuredSubtitle: "Produit yi butig bi tànn ngir wone leen.",
     latestTitle: "Yu bees yi",
     latestSubtitle: "Produit yi ñu mujj a yokk ci catalogue bi.",
-    collectionsEyebrow: "Mbooloo yi",
-    collectionsTitle: "Sunu mbooloo yi",
-    collectionsSubtitle: "Ay adduna yu nekk seen bopp, ngir xool leen bu baax.",
-    collectionsCta: "Xool mbooloo mi",
     trust: [
       { title: "Commande bu yomb", text: "Defal sa panier, butig bi dina la tontu ci WhatsApp." },
       { title: "Njëg yu leer", text: "Njëg yi ci FCFA lañu ; li ñu dëggalagul dañu ko wone bu leer." },

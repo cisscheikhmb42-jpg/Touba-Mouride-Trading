@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "../globals.css";
-import { inter, montserrat } from "../fonts";
+import { jakarta } from "../fonts";
 
 export const metadata: Metadata = {
   title: { default: "Administration", template: "%s · Administration TMT" },
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function AdminRootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className={`${montserrat.variable} ${inter.variable}`}>
+    <html lang="fr" className={jakarta.variable}>
       <body className="min-h-dvh bg-paper antialiased">{children}</body>
     </html>
   );

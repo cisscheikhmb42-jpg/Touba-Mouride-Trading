@@ -15,6 +15,7 @@ const fr = {
     home: "Accueil",
     shop: "Boutique",
     categories: "Catégories",
+    faqShort: "FAQ",
     contact: "Contact",
     faq: "Questions fréquentes",
     blog: "Blog",
@@ -60,10 +61,6 @@ const fr = {
     featuredSubtitle: "Les articles mis en avant par la boutique.",
     latestTitle: "Nouveautés",
     latestSubtitle: "Les derniers articles ajoutés au catalogue.",
-    collectionsEyebrow: "Collections",
-    collectionsTitle: "Nos collections",
-    collectionsSubtitle: "Des univers à part entière, à découvrir en détail.",
-    collectionsCta: "Voir la collection",
     trust: [
       { title: "Commande simple", text: "Composez votre panier, la boutique vous répond sur WhatsApp." },
       { title: "Prix transparents", text: "Prix affichés en FCFA ; ce qui reste à confirmer est indiqué clairement." },

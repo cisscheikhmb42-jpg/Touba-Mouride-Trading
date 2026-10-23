@@ -26,7 +26,6 @@ export function StockBadge({ state, dict }: { state: StockState; dict: Dictionar
         : "bg-[#e7f5ec] text-success";
   return (
     <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${tone}`}>
-      <span aria-hidden="true" className="size-1.5 rounded-full bg-current" />
       {stockLabel(state, dict)}
     </span>
   );

@@ -1,16 +1,9 @@
-import { Inter, Montserrat } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 
-/** Montserrat : titres et nom de marque (proche du lettrage du logo). */
-export const montserrat = Montserrat({
+/** Plus Jakarta Sans : titres et texte (géométrique et lisible, proche du lettrage du logo). */
+export const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin", "latin-ext"],
-  weight: ["600", "700", "800"],
-  variable: "--font-montserrat",
-  display: "swap",
-});
-
-/** Inter : texte courant, très lisible sur mobile. */
-export const inter = Inter({
-  subsets: ["latin", "latin-ext"],
-  variable: "--font-inter",
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-jakarta",
   display: "swap",
 });

@@ -72,7 +72,7 @@ const wo: Dictionary = {
     trust: [
       { title: "Commande bu yomb", text: "Defal sa panier, butig bi dina la tontu ci WhatsApp." },
       { title: "Njëg yu leer", text: "Njëg yi ci FCFA lañu ; li ñu dëggalagul dañu ko wone bu leer." },
-      { title: "Yóbbu ci Senegaal", text: "Dakar, Keur Massar ak yeneen diiwaan : njëgu yóbbu bi dinañu ko dëggal balaa commande." },
+      { title: "Danuy yóbbu fépp", text: "Dakar, Keur Massar, diiwaan yi ak bitim-réew : njëgu yóbbu bi dinañu ko dëggal ci WhatsApp." },
     ],
     emptyCatalogTitle: "Catalogue bi mu ngi ñëw",
     emptyCatalogText:
@@ -124,7 +124,7 @@ const wo: Dictionary = {
     noDescription: "Leeral bu mat ci produit bii dina ñëw ci kanam.",
     deliveryTitle: "Yóbbu",
     deliveryText:
-      "Danuy yóbbu ci Dakar ak ci yeneen diiwaan yi ci Senegaal. Njëgu yóbbu ak diir bi dañu koy wone bu ñu ko xamee, lu ko moy dañu la koy wax ci WhatsApp.",
+      "Danuy yóbbu ci Dakar, ci yeneen diiwaan yi ci Senegaal ak ci bitim-réew. Njëgu yóbbu ak diir bi dañu la koy wax ci WhatsApp.",
     similar: "Yeneen produit yu ni mel",
     sku: "Référence",
     photoComing: "Nataal bi dina ñëw",
@@ -286,7 +286,11 @@ const wo: Dictionary = {
       },
       {
         q: "Ñaata la njëgu yóbbu bi ?",
-        a: "Njëg gi dafa aju ci sa zone. Bu ñu ko xamee, dafay feeñ ci panier bi ; lu ko moy, dañu la koy wax ci WhatsApp balaa ñuy dëggal.",
+        a: "Njëg gi dafa aju ci sa zone ak sa adrees. Dañu la koy wax ci WhatsApp balaa ñuy dëggal sa commande.",
+      },
+      {
+        q: "Ndax dangeen di yóbbu ci bitim-réew ?",
+        a: "Waaw, danuy yóbbu itam ci bitim-réew. Tànnal zone « International » ci panier bi te bind sa réew ak sa dëkk : dinanu la wax njëgu yóbbu bi ak diir bi ci WhatsApp.",
       },
       {
         q: "Benn produit dafa bind « Njëg gi dañu koy dëggal », lan laa wara def ?",
@@ -324,7 +328,7 @@ const wo: Dictionary = {
       },
       {
         title: "Nu ngi ci sa wet",
-        text: "Nu ngi ci Liberté 5 (Dakar) ak ci Keur Massar, te dinanu yóbbu ci Senegaal ci gox yi ñu wax.",
+        text: "Nu ngi ci Liberté 5 (Dakar) ak ci Keur Massar. Danuy yóbbu fépp ci Senegaal ak ci bitim-réew : njëgu yóbbu bi dinañu ko dëggal ak yow ci WhatsApp.",
       },
     ],
     visitTitle: "Fan lanu nekk",

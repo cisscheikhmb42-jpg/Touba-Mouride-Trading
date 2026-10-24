@@ -65,7 +65,7 @@ const fr = {
     trust: [
       { title: "Commande simple", text: "Composez votre panier, la boutique vous répond sur WhatsApp." },
       { title: "Prix transparents", text: "Prix affichés en FCFA ; ce qui reste à confirmer est indiqué clairement." },
-      { title: "Livraison au Sénégal", text: "Dakar, Keur Massar et autres régions : frais confirmés avant toute commande." },
+      { title: "Livraison partout", text: "Dakar, Keur Massar, régions et international : frais confirmés sur WhatsApp." },
     ],
     emptyCatalogTitle: "Le catalogue arrive bientôt",
     emptyCatalogText:
@@ -117,7 +117,7 @@ const fr = {
     noDescription: "La description détaillée de cet article sera ajoutée prochainement.",
     deliveryTitle: "Livraison",
     deliveryText:
-      "Livraison à Dakar et dans les autres régions du Sénégal. Les frais et délais sont indiqués lorsqu'ils sont connus, sinon confirmés sur WhatsApp.",
+      "Livraison à Dakar, dans les autres régions du Sénégal et à l'international. Les frais et délais sont confirmés sur WhatsApp.",
     similar: "Produits similaires",
     sku: "Référence",
     photoComing: "Photo à venir",
@@ -279,7 +279,11 @@ const fr = {
       },
       {
         q: "Quels sont les frais de livraison ?",
-        a: "Les frais dépendent de votre zone. Lorsqu'ils sont connus, ils sont affichés dans le panier ; sinon, ils vous sont communiqués sur WhatsApp avant toute confirmation.",
+        a: "Les frais dépendent de votre zone et de votre adresse. Ils vous sont communiqués sur WhatsApp avant toute confirmation de commande.",
+      },
+      {
+        q: "Livrez-vous à l'étranger ?",
+        a: "Oui, nous livrons aussi à l'international. Choisissez la zone « International » dans le panier et indiquez votre pays et votre ville : nous vous confirmons les frais et le délai sur WhatsApp.",
       },
       {
         q: "Un article affiche « Prix à confirmer », que faire ?",
@@ -317,7 +321,7 @@ const fr = {
       },
       {
         title: "Proches de vous",
-        text: "Nous sommes à Liberté 5 (Dakar) et à Keur Massar, et nous livrons au Sénégal selon les zones indiquées.",
+        text: "Nous sommes à Liberté 5 (Dakar) et à Keur Massar. Nous livrons partout au Sénégal et à l'international : les frais sont confirmés avec vous sur WhatsApp.",
       },
     ],
     visitTitle: "Où nous trouver",

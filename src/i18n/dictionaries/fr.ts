@@ -11,6 +11,7 @@ const fr = {
       "Jallabes, chaussures orthopédiques, marakiss, parfums, Xassaïdes et chapelets. Commandez en ligne et finalisez votre demande sur WhatsApp. Liberté 5, Dakar et Keur Massar.",
   },
   common: {
+    about: "À propos",
     skipToContent: "Aller au contenu",
     home: "Accueil",
     shop: "Boutique",
@@ -293,6 +294,36 @@ const fr = {
         a: "Les modalités de paiement vous sont précisées par la boutique lors de la confirmation de votre commande sur WhatsApp.",
       },
     ],
+  },
+  aboutPage: {
+    title: "À propos",
+    description:
+      "TOUBA MOURIDE TRADING, boutique d'articles mourides à Liberté 5 (Dakar) et Keur Massar : jallabes, marakiss, parfums, Xassaïdes, chapelets et plus.",
+    eyebrow: "Qui sommes-nous",
+    heading: "Une boutique au service de la communauté mouride",
+    intro:
+      "TOUBA MOURIDE TRADING réunit en un seul endroit les articles et accessoires de l'univers mouride : tenues, chaussures, parfums, Xassaïdes et chapelets. Notre boutique est présente à Liberté 5 (Dakar) et à Keur Massar, et ce site vous permet de découvrir nos articles et de nous envoyer votre demande directement sur WhatsApp.",
+    offerTitle: "Ce que nous proposons",
+    offerText: "Nos articles sont classés par catégorie pour vous aider à trouver ce que vous cherchez.",
+    valuesTitle: "Notre façon de travailler",
+    values: [
+      {
+        title: "Des informations claires",
+        text: "Les prix sont affichés en FCFA lorsqu'ils sont confirmés. Ce qui reste à confirmer est toujours indiqué, sans surprise.",
+      },
+      {
+        title: "Un échange direct",
+        text: "Chaque demande arrive sur notre WhatsApp. Nous vous répondons pour confirmer la disponibilité, les montants et la livraison.",
+      },
+      {
+        title: "Proches de vous",
+        text: "Nous sommes à Liberté 5 (Dakar) et à Keur Massar, et nous livrons au Sénégal selon les zones indiquées.",
+      },
+    ],
+    visitTitle: "Où nous trouver",
+    visitText: "Écrivez-nous avant de vous déplacer : nous vous indiquerons comment nous rejoindre.",
+    ctaShop: "Voir la boutique",
+    learnMore: "En savoir plus sur nous",
   },
   contactPage: {
     title: "Contact",

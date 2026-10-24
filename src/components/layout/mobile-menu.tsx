@@ -39,6 +39,7 @@ export function MobileMenu({
     { href: paths.home(locale), label: dict.common.home },
     { href: paths.shop(locale), label: dict.common.shop },
     { href: paths.faq(locale), label: dict.common.faq },
+    { href: paths.about(locale), label: dict.common.about },
     { href: paths.contact(locale), label: dict.common.contact },
     { href: paths.blog(locale), label: dict.common.blog },
   ];

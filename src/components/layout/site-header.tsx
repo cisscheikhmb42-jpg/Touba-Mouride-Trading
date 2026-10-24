@@ -32,6 +32,7 @@ export function SiteHeader({
   const nav = [
     { href: paths.shop(locale), label: dict.common.shop },
     { href: paths.faq(locale), label: dict.common.faqShort },
+    { href: paths.about(locale), label: dict.common.about },
     { href: paths.contact(locale), label: dict.common.contact },
   ];
   return (

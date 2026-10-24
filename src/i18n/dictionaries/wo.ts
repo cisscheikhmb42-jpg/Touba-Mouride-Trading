@@ -18,6 +18,7 @@ const wo: Dictionary = {
       "Jallabe, dàll yu orthopédique, marakiss, parfum, Xassaïdes ak kurus. Tànnal ci internet te yónnee sa commande ci WhatsApp. Liberté 5, Dakar ak Keur Massar.",
   },
   common: {
+    about: "Ci sunu mbir",
     skipToContent: "Dem ci li ci biir",
     home: "Kër gi",
     shop: "Butig bi",
@@ -300,6 +301,36 @@ const wo: Dictionary = {
         a: "Butig bi dina la wax naka ngay feye bu ñuy dëggal sa commande ci WhatsApp.",
       },
     ],
+  },
+  aboutPage: {
+    title: "Ci sunu mbir",
+    description:
+      "TOUBA MOURIDE TRADING, butig bu jaay jumtukaay yu Mouride ci Liberté 5 (Dakar) ak Keur Massar : jallabe, marakiss, latkoloñ, Xassaïde, kurus ak yeneen.",
+    eyebrow: "Noo nekk",
+    heading: "Butig buy jàppale mbooloom Mouride yi",
+    intro:
+      "TOUBA MOURIDE TRADING dafa dajale ci benn bérab jumtukaay yu adduna Mouride : yére, dàll, latkoloñ, Xassaïde ak kurus. Sunu butig nekk na ci Liberté 5 (Dakar) ak ci Keur Massar. Site bii dina la may nga xool sunu produit yi te yónnee nu sa laaj ci WhatsApp.",
+    offerTitle: "Li nuy jaay",
+    offerText: "Sunu produit yi dañu leen xaajale ci catégorie ngir nga gën a gis li ngay seet.",
+    valuesTitle: "Ni nuy liggéeye",
+    values: [
+      {
+        title: "Xibaar yu leer",
+        text: "Njëg yi ñu ngi leen bind ci FCFA bu ñu ko dëggalee. Li des ngir dëggal, dañu koy wax bu leer.",
+      },
+      {
+        title: "Waxtaan ak nun ci saa si",
+        text: "Sa laaj dina agsi ci sunu WhatsApp. Dinanu la tontu ngir dëggal li am, njëg yi ak yóbbu gi.",
+      },
+      {
+        title: "Nu ngi ci sa wet",
+        text: "Nu ngi ci Liberté 5 (Dakar) ak ci Keur Massar, te dinanu yóbbu ci Senegaal ci gox yi ñu wax.",
+      },
+    ],
+    visitTitle: "Fan lanu nekk",
+    visitText: "Bindal nu balaa ngay dem : dinanu la wax ni ngay agsee.",
+    ctaShop: "Xool butig bi",
+    learnMore: "Gën a xam nun",
   },
   contactPage: {
     title: "Jokkoo ak nun",

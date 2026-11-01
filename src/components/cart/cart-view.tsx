@@ -13,6 +13,7 @@ import type { CartQuote, DeliveryZone, QuoteLine } from "@/lib/types";
 import { QuantityStepper } from "@/components/catalog/quantity-stepper";
 import { ImagePlaceholder } from "@/components/catalog/image-placeholder";
 import { WhatsAppIcon } from "@/components/ui/icons";
+import { isLocalImage } from "@/lib/images";
 
 type SuccessState = { orderNumber: string; whatsappUrl: string; message: string };
 const LAST_ORDER_KEY = "tmt_last_order";
@@ -214,7 +215,7 @@ function CartLine({ item, line }: { item: CartItem; line?: QuoteLine }) {
     <li className="flex gap-4 p-4 sm:p-5">
       <Link href={paths.product(locale, item.snapshot.slug)} className="relative block size-24 shrink-0 overflow-hidden rounded-xl bg-paper sm:size-28">
         {image ? (
-          <Image src={image} alt="" fill sizes="112px" quality={70} className="object-cover" />
+          <Image unoptimized={isLocalImage(image)} src={image} alt="" fill sizes="112px" quality={70} className="object-cover" />
         ) : (
           <ImagePlaceholder label="" />
         )}

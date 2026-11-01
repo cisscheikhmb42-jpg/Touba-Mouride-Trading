@@ -6,6 +6,7 @@ import { paths } from "@/i18n/paths";
 import type { Category } from "@/lib/types";
 import { pick } from "@/lib/types";
 import { StarFrieze } from "@/components/ui/ornament";
+import { isLocalImage } from "@/lib/images";
 
 /** Les trois couleurs du logo : turquoise, noir, blanc. */
 const TONES = [
@@ -27,6 +28,7 @@ export function CategoryTile({ category, locale, index }: { category: Category; 
       {category.image_url ? (
         <>
           <Image
+            unoptimized={isLocalImage(category.image_url)}
             src={category.image_url}
             alt=""
             fill

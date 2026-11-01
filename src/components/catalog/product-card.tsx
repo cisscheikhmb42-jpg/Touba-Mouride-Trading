@@ -12,6 +12,7 @@ import { ImagePlaceholder } from "./image-placeholder";
 import { QuickAddButton } from "./quick-add-button";
 import { AskPriceButton } from "./ask-price-button";
 import { format } from "@/i18n/config";
+import { isLocalImage } from "@/lib/images";
 
 export function ProductCard({
   product,
@@ -36,6 +37,7 @@ export function ProductCard({
       <Link href={href} className="relative block aspect-[4/5] overflow-hidden bg-paper" tabIndex={-1} aria-hidden="true">
         {image ? (
           <Image
+            unoptimized={isLocalImage(image.image_url)}
             src={image.image_url}
             alt=""
             fill

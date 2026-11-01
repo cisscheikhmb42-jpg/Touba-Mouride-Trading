@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 import { format } from "@/i18n/config";
 import { useI18n } from "@/i18n/client";
 import { ImagePlaceholder } from "./image-placeholder";
+import { isLocalImage } from "@/lib/images";
 
 export type GalleryImage = { id: string; url: string; alt: string };
 
@@ -45,6 +46,7 @@ export function ProductGallery({ images }: { images: GalleryImage[] }) {
         {images.map((img, i) => (
           <div key={img.id} className="relative h-full w-full shrink-0">
             <Image
+              unoptimized={isLocalImage(img.url)}
               src={img.url}
               alt={img.alt}
               fill
@@ -69,7 +71,7 @@ export function ProductGallery({ images }: { images: GalleryImage[] }) {
                   i === active ? "border-ink" : "border-transparent opacity-70 hover:opacity-100"
                 }`}
               >
-                <Image src={img.url} alt="" fill sizes="72px" quality={70} className="object-cover" />
+                <Image unoptimized={isLocalImage(img.url)} src={img.url} alt="" fill sizes="72px" quality={70} className="object-cover" />
               </button>
             </li>
           ))}

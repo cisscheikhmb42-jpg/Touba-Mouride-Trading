@@ -20,6 +20,7 @@ import { WhatsAppIcon } from "@/components/ui/icons";
 import { CategoryTile } from "@/components/catalog/category-tile";
 import { ProductCard } from "@/components/catalog/product-card";
 import { JsonLd } from "@/components/seo/json-ld";
+import { isLocalImage } from "@/lib/images";
 
 export async function generateMetadata({ params }: PageProps<"/[lang]">): Promise<Metadata> {
   const { lang } = await params;
@@ -231,6 +232,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                   }`}
                 >
                   <Image
+                    unoptimized={isLocalImage(img.image_url)}
                     src={img.image_url}
                     alt={(locale === "wo" ? img.alt_text_wo : img.alt_text_fr) || pick(p, "name", locale)}
                     fill
@@ -368,7 +370,7 @@ function HeroVisual({
       <div className="overflow-hidden rounded-[2.25rem] border border-line bg-white shadow-[0_30px_80px_-40px_rgb(7_63_75/0.45)]">
         {image ? (
           <div className="relative aspect-[4/3] bg-brand-50">
-            <Image src={image} alt={alt} fill priority sizes="(min-width: 1024px) 40vw, 100vw" quality={85} className="object-cover" />
+            <Image unoptimized={isLocalImage(image)} src={image} alt={alt} fill priority sizes="(min-width: 1024px) 40vw, 100vw" quality={85} className="object-cover" />
           </div>
         ) : null}
         <div className="flex flex-col items-center px-7 py-10 text-center sm:px-10 sm:py-12">

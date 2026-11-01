@@ -6,7 +6,7 @@ import { isLocale, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { paths } from "@/i18n/paths";
 import { getCategories, getProducts, getStoreSettings } from "@/lib/data/catalog";
-import { topLevel } from "@/lib/data/categories";
+import { categoryCover, topLevel } from "@/lib/data/categories";
 import { pick } from "@/lib/types";
 import { whatsappUrl } from "@/lib/whatsapp";
 import { pageMetadata } from "@/lib/seo";
@@ -151,7 +151,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
             />
             <Carousel label={dict.home.categoriesTitle} itemClassName="w-[62%] sm:w-[36%] lg:w-[23.5%] xl:w-[19%]">
               {categories.map((c, i) => (
-                <CategoryTile key={c.id} category={c} locale={locale} index={i} />
+                <CategoryTile key={c.id} category={{ ...c, image_url: categoryCover(allCategories, products, c) }} locale={locale} index={i} />
               ))}
             </Carousel>
           </Reveal>

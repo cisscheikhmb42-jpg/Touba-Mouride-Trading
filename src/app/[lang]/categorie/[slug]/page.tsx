@@ -4,11 +4,15 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { format, isLocale, type Locale } from "@/i18n/config";
-import { getDictionary } from "@/i18n/dictionaries";
+import { getDictionary, type Dictionary } from "@/i18n/dictionaries";
 import { paths } from "@/i18n/paths";
-import { getCategories, getCategoryBySlug } from "@/lib/data/catalog";
-import { childrenOf, topLevel } from "@/lib/data/categories";
-import { pick } from "@/lib/types";
+import Image from "next/image";
+import { ArrowUpRight } from "lucide-react";
+import { getCategories, getCategoryBySlug, getProducts } from "@/lib/data/catalog";
+import { categoryCover, categoryMinPrice, childrenOf, productsIn, topLevel } from "@/lib/data/categories";
+import { formatFCFA } from "@/lib/format";
+import { isLocalImage } from "@/lib/images";
+import { pick, type Category } from "@/lib/types";
 import { pageMetadata, truncate } from "@/lib/seo";
 import { Breadcrumbs } from "@/components/seo/breadcrumbs";
 import { CatalogView } from "@/components/catalog/catalog-view";
@@ -68,26 +72,17 @@ async function CategoryPageContent({ params, searchParams }: PageProps<"/[lang]/
         {description && <p className="mt-4 text-lg text-muted">{description}</p>}
       </header>
       {family.length > 0 && (
-        <nav aria-label={dict.catalog.subcategories} className="-mt-2 mb-8">
-          <ul className="flex flex-wrap gap-2">
-            {[{ id: familyRoot.id, slug: familyRoot.slug, label: dict.catalog.allOfCategory }, ...family.map((c) => ({ id: c.id, slug: c.slug, label: pick(c, "name", locale) }))].map((item) => {
-              const current = item.id === category.id;
-              return (
-                <li key={item.id}>
-                  <Link
-                    href={paths.category(locale, item.slug)}
-                    aria-current={current ? "page" : undefined}
-                    className={`inline-block rounded-xl border px-4 py-2.5 text-sm font-bold transition ${
-                      current ? "border-ink bg-ink text-white" : "border-line bg-white text-ink hover:border-brand-500"
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
+        <Suspense fallback={<div className="mb-10 h-64" aria-hidden="true" />}>
+          <SubcategoryCards
+            searchParams={searchParams}
+            locale={locale}
+            dict={dict}
+            categories={categories}
+            family={family}
+            currentId={category.id}
+            parentSlug={parent?.slug ?? null}
+          />
+        </Suspense>
       )}
       <h2 className="sr-only">{format(dict.catalog.productsIn, { name })}</h2>
       <Suspense fallback={<GridSkeleton />}>
@@ -119,6 +114,85 @@ async function CategoryPageContent({ params, searchParams }: PageProps<"/[lang]/
         </nav>
       )}
     </div>
+  );
+}
+
+/**
+ * Les parties d'une catégorie, en cartes avec photo et prix de départ.
+ * Lit d'abord les paramètres d'URL : les produits sont chargés à la requête,
+ * jamais figés dans la page prérendue au build.
+ */
+async function SubcategoryCards({
+  searchParams,
+  locale,
+  dict,
+  categories,
+  family,
+  currentId,
+  parentSlug,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+  locale: Locale;
+  dict: Dictionary;
+  categories: Category[];
+  family: Category[];
+  currentId: string;
+  parentSlug: string | null;
+}) {
+  await searchParams;
+  const products = await getProducts();
+  return (
+    <nav aria-label={dict.catalog.subcategories} className="-mt-2 mb-10">
+      {parentSlug && (
+        <Link href={paths.category(locale, parentSlug)} className="mb-4 inline-block rounded-xl border border-line bg-white px-4 py-2.5 text-sm font-bold transition hover:border-brand-500">
+          {dict.catalog.allOfCategory}
+        </Link>
+      )}
+      <ul className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
+        {family.map((c) => {
+          const current = c.id === currentId;
+          const cover = categoryCover(categories, products, c);
+          const min = categoryMinPrice(categories, products, c.id);
+          const count = productsIn(categories, products, c.id).length;
+          return (
+            <li key={c.id}>
+              <Link
+                href={paths.category(locale, c.slug)}
+                aria-current={current ? "page" : undefined}
+                className={`group block overflow-hidden rounded-[1.5rem] border bg-white transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-lift)] ${
+                  current ? "border-ink ring-2 ring-ink" : "border-line"
+                }`}
+              >
+                <span className="relative block aspect-[4/3] bg-brand-50">
+                  {cover && (
+                    <Image
+                      unoptimized={isLocalImage(cover)}
+                      src={cover}
+                      alt=""
+                      fill
+                      sizes="(min-width: 1024px) 28vw, 50vw"
+                      quality={70}
+                      className="object-cover object-top transition duration-700 group-hover:scale-105"
+                    />
+                  )}
+                </span>
+                <span className="flex items-end justify-between gap-3 p-4 sm:p-5">
+                  <span className="min-w-0">
+                    <span className="block font-display text-base leading-tight font-extrabold sm:text-lg">{pick(c, "name", locale)}</span>
+                    <span className="mt-1.5 block text-sm font-semibold text-brand-800">
+                      {min !== null ? `${dict.product.from} ${formatFCFA(min)}` : format(dict.catalog.results, { n: count })}
+                    </span>
+                  </span>
+                  <span aria-hidden="true" className="grid size-9 shrink-0 place-items-center rounded-xl bg-ink text-white transition group-hover:bg-brand-700">
+                    <ArrowUpRight className="size-4" />
+                  </span>
+                </span>
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
   );
 }
 

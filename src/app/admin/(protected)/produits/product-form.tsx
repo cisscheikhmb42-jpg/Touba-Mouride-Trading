@@ -26,7 +26,7 @@ type ProductLike = {
   seo_description_wo?: string | null;
 };
 
-export function ProductForm({ product = {}, categories }: { product?: ProductLike; categories: { id: string; name_fr: string }[] }) {
+export function ProductForm({ product = {}, categories }: { product?: ProductLike; categories: { id: string; label: string }[] }) {
   return (
     <ActionForm action={saveProduct} submitLabel={product.id ? "Enregistrer le produit" : "Créer le produit"} className="space-y-6">
       {product.id && <input type="hidden" name="id" value={product.id} />}
@@ -43,7 +43,7 @@ export function ProductForm({ product = {}, categories }: { product?: ProductLik
               <option value="">— Aucune —</option>
               {categories.map((c) => (
                 <option key={c.id} value={c.id}>
-                  {c.name_fr}
+                  {c.label}
                 </option>
               ))}
             </select>

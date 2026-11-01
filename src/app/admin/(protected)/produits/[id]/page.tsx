@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowDown, ArrowUp, ExternalLink } from "lucide-react";
+import { adminCategoryOptions } from "@/lib/data/categories";
 import { requireAdmin } from "@/lib/admin/auth";
 import { ActionForm, ConfirmSubmit } from "@/components/admin/action-form";
 import { Checkbox, Field, Panel } from "@/components/admin/fields";
@@ -24,7 +25,7 @@ export default async function EditProductPage({ params, searchParams }: PageProp
   if (!/^[0-9a-f-]{36}$/i.test(id)) notFound();
   const [{ data: product }, { data: categories }] = await Promise.all([
     supabase.from("products").select("*, product_images(*), product_variants(*)").eq("id", id).maybeSingle(),
-    supabase.from("categories").select("id, name_fr").order("sort_order"),
+    supabase.from("categories").select("id, name_fr, parent_id").order("sort_order"),
   ]);
   if (!product) notFound();
   const images = [...product.product_images].sort((a, b) => a.position - b.position);
@@ -45,7 +46,7 @@ export default async function EditProductPage({ params, searchParams }: PageProp
       </div>
       {sp.cree && <p role="status" className="text-sm font-semibold text-success">Produit créé. Ajoutez maintenant les photos et les variantes.</p>}
 
-      <ProductForm product={product} categories={categories ?? []} />
+      <ProductForm product={product} categories={adminCategoryOptions(categories ?? [])} />
 
       {isAiConfigured && (
         <Panel title="Assistant de rédaction (IA)" description="Propose un brouillon à partir des seules informations fournies. Relisez et corrigez toujours avant publication.">

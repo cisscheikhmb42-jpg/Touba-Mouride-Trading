@@ -22,6 +22,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...entry("/boutique", undefined, 0.9),
     ...categories.flatMap((c) => entry(`/categorie/${c.slug}`, c.updated_at, 0.8)),
     ...products.flatMap((p) => entry(`/produit/${p.slug}`, p.updated_at, 0.7)),
+    ...entry("/a-propos", undefined, 0.5),
     ...entry("/faq", undefined, 0.4),
     ...entry("/contact", undefined, 0.4),
     ...entry("/livraison-et-retours", undefined, 0.3),

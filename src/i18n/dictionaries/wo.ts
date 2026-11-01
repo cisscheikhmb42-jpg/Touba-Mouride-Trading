@@ -18,6 +18,7 @@ const wo: Dictionary = {
       "Jallabe, dàll yu orthopédique, marakiss, parfum, Xassaïdes ak kurus. Tànnal ci internet te yónnee sa commande ci WhatsApp. Liberté 5, Dakar ak Keur Massar.",
   },
   common: {
+    about: "Ci sunu mbir",
     skipToContent: "Dem ci li ci biir",
     home: "Kër gi",
     shop: "Butig bi",
@@ -71,7 +72,7 @@ const wo: Dictionary = {
     trust: [
       { title: "Commande bu yomb", text: "Defal sa panier, butig bi dina la tontu ci WhatsApp." },
       { title: "Njëg yu leer", text: "Njëg yi ci FCFA lañu ; li ñu dëggalagul dañu ko wone bu leer." },
-      { title: "Yóbbu ci Senegaal", text: "Dakar, Keur Massar ak yeneen diiwaan : njëgu yóbbu bi dinañu ko dëggal balaa commande." },
+      { title: "Danuy yóbbu fépp", text: "Dakar, Keur Massar, diiwaan yi ak bitim-réew : njëgu yóbbu bi dinañu ko dëggal ci WhatsApp." },
     ],
     emptyCatalogTitle: "Catalogue bi mu ngi ñëw",
     emptyCatalogText:
@@ -123,7 +124,7 @@ const wo: Dictionary = {
     noDescription: "Leeral bu mat ci produit bii dina ñëw ci kanam.",
     deliveryTitle: "Yóbbu",
     deliveryText:
-      "Danuy yóbbu ci Dakar ak ci yeneen diiwaan yi ci Senegaal. Njëgu yóbbu ak diir bi dañu koy wone bu ñu ko xamee, lu ko moy dañu la koy wax ci WhatsApp.",
+      "Danuy yóbbu ci Dakar, ci yeneen diiwaan yi ci Senegaal ak ci bitim-réew. Njëgu yóbbu ak diir bi dañu la koy wax ci WhatsApp.",
     similar: "Yeneen produit yu ni mel",
     sku: "Référence",
     photoComing: "Nataal bi dina ñëw",
@@ -164,6 +165,9 @@ const wo: Dictionary = {
     apply: "Wone",
     emptyCategory: "Amagul benn produit ci xeet bii.",
     otherCategories: "Yeneen xeet",
+    otherProducts: "Yeneen modèle",
+    subcategories: "Xaaj yi ci xeet bii",
+    allOfCategory: "Xool lépp",
     productsIn: "Produit yu xeet {name}",
   },
   cart: {
@@ -285,7 +289,11 @@ const wo: Dictionary = {
       },
       {
         q: "Ñaata la njëgu yóbbu bi ?",
-        a: "Njëg gi dafa aju ci sa zone. Bu ñu ko xamee, dafay feeñ ci panier bi ; lu ko moy, dañu la koy wax ci WhatsApp balaa ñuy dëggal.",
+        a: "Njëg gi dafa aju ci sa zone ak sa adrees. Dañu la koy wax ci WhatsApp balaa ñuy dëggal sa commande.",
+      },
+      {
+        q: "Ndax dangeen di yóbbu ci bitim-réew ?",
+        a: "Waaw, danuy yóbbu itam ci bitim-réew. Tànnal zone « International » ci panier bi te bind sa réew ak sa dëkk : dinanu la wax njëgu yóbbu bi ak diir bi ci WhatsApp.",
       },
       {
         q: "Benn produit dafa bind « Njëg gi dañu koy dëggal », lan laa wara def ?",
@@ -300,6 +308,36 @@ const wo: Dictionary = {
         a: "Butig bi dina la wax naka ngay feye bu ñuy dëggal sa commande ci WhatsApp.",
       },
     ],
+  },
+  aboutPage: {
+    title: "Ci sunu mbir",
+    description:
+      "TOUBA MOURIDE TRADING, butig bu jaay jumtukaay yu Mouride ci Liberté 5 (Dakar) ak Keur Massar : jallabe, marakiss, latkoloñ, Xassaïde, kurus ak yeneen.",
+    eyebrow: "Noo nekk",
+    heading: "Butig buy jàppale mbooloom Mouride yi",
+    intro:
+      "TOUBA MOURIDE TRADING dafa dajale ci benn bérab jumtukaay yu adduna Mouride : yére, dàll, latkoloñ, Xassaïde ak kurus. Sunu butig nekk na ci Liberté 5 (Dakar) ak ci Keur Massar. Site bii dina la may nga xool sunu produit yi te yónnee nu sa laaj ci WhatsApp.",
+    offerTitle: "Li nuy jaay",
+    offerText: "Sunu produit yi dañu leen xaajale ci catégorie ngir nga gën a gis li ngay seet.",
+    valuesTitle: "Ni nuy liggéeye",
+    values: [
+      {
+        title: "Xibaar yu leer",
+        text: "Njëg yi ñu ngi leen bind ci FCFA bu ñu ko dëggalee. Li des ngir dëggal, dañu koy wax bu leer.",
+      },
+      {
+        title: "Waxtaan ak nun ci saa si",
+        text: "Sa laaj dina agsi ci sunu WhatsApp. Dinanu la tontu ngir dëggal li am, njëg yi ak yóbbu gi.",
+      },
+      {
+        title: "Nu ngi ci sa wet",
+        text: "Nu ngi ci Liberté 5 (Dakar) ak ci Keur Massar. Danuy yóbbu fépp ci Senegaal ak ci bitim-réew : njëgu yóbbu bi dinañu ko dëggal ak yow ci WhatsApp.",
+      },
+    ],
+    visitTitle: "Fan lanu nekk",
+    visitText: "Bindal nu balaa ngay dem : dinanu la wax ni ngay agsee.",
+    ctaShop: "Xool butig bi",
+    learnMore: "Gën a xam nun",
   },
   contactPage: {
     title: "Jokkoo ak nun",

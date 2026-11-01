@@ -71,7 +71,7 @@ function productJsonLd(product: Product, locale: Locale, categoryName: string | 
     name: pick(product, "name", locale),
     ...(pick(product, "description", locale) ? { description: pick(product, "description", locale) } : {}),
     ...(product.sku ? { sku: product.sku } : {}),
-    ...(product.product_images.length ? { image: product.product_images.map((i) => i.image_url) } : {}),
+    ...(product.product_images.length ? { image: product.product_images.map((i) => new URL(i.image_url, SITE_URL).toString()) } : {}),
     ...(categoryName ? { category: categoryName } : {}),
     brand: { "@type": "Brand", name: "TOUBA MOURIDE TRADING" },
     url,
@@ -94,6 +94,7 @@ async function ProductPageContent({ params }: PageProps<"/[lang]/produit/[slug]"
   const name = pick(product, "name", locale);
   const description = pick(product, "description", locale);
   const category = categories.find((c) => c.id === product.category_id) ?? null;
+  const parentCategory = category?.parent_id ? (categories.find((c) => c.id === category.parent_id) ?? null) : null;
   const categoryName = category ? pick(category, "name", locale) : null;
   const similar = products.filter((p) => p.id !== product.id && p.category_id === product.category_id).slice(0, 10);
   const productUrl = `${SITE_URL}${paths.product(locale, product.slug)}`;
@@ -102,6 +103,7 @@ async function ProductPageContent({ params }: PageProps<"/[lang]/produit/[slug]"
   const crumbs: Crumb[] = [
     { label: dict.common.home, href: paths.home(locale) },
     { label: dict.catalog.title, href: paths.shop(locale) },
+    ...(parentCategory ? [{ label: pick(parentCategory, "name", locale), href: paths.category(locale, parentCategory.slug) }] : []),
     ...(category && categoryName ? [{ label: categoryName, href: paths.category(locale, category.slug) }] : []),
     { label: name, href: paths.product(locale, product.slug) },
   ];

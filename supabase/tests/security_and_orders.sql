@@ -47,7 +47,7 @@ begin
   assert n = 0, 'anon ne doit pas voir une zone inactive';
 
   select count(*) into n from public.categories;
-  assert n = 10, 'anon doit voir les 10 catégories, vu ' || n;
+  assert n = 12, 'anon doit voir les 12 catégories (10 + 2 sous-catégories), vu ' || n;
 
   -- Devis : prix calculés en base
   q := public.quote_cart('[{"product_id":"aaaaaaaa-0000-0000-0000-000000000001","quantity":2},

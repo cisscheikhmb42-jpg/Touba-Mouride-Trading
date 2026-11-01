@@ -8,6 +8,7 @@ export const paths = {
   product: (l: Locale, slug: string) => `/${l}/produit/${slug}`,
   cart: (l: Locale) => `/${l}/panier`,
   contact: (l: Locale) => `/${l}/contact`,
+  about: (l: Locale) => `/${l}/a-propos`,
   faq: (l: Locale) => `/${l}/faq`,
   delivery: (l: Locale) => `/${l}/livraison-et-retours`,
   privacy: (l: Locale) => `/${l}/confidentialite`,

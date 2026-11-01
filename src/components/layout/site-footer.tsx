@@ -61,6 +61,7 @@ export function SiteFooter({
           <FooterLink href={paths.cart(locale)}>{dict.common.cart}</FooterLink>
           <FooterLink href={paths.faq(locale)}>{dict.common.faq}</FooterLink>
           <FooterLink href={paths.blog(locale)}>{dict.common.blog}</FooterLink>
+          <FooterLink href={paths.about(locale)}>{dict.common.about}</FooterLink>
           <FooterLink href={paths.contact(locale)}>{dict.common.contact}</FooterLink>
         </FooterColumn>
         <FooterColumn title={dict.common.categories}>

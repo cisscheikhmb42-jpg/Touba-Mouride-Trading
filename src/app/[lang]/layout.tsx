@@ -10,6 +10,7 @@ import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { StoreProvider } from "@/components/layout/store-context";
 import { WhatsAppFloat } from "@/components/layout/whatsapp-float";
+import { topLevel } from "@/lib/data/categories";
 import { getCategories, getStoreSettings } from "@/lib/data/catalog";
 import { SITE_URL } from "@/lib/env";
 
@@ -43,7 +44,8 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
   const { lang } = await params;
   if (!isLocale(lang)) notFound();
   const dict = getDictionary(lang);
-  const [settings, categories] = await Promise.all([getStoreSettings(), getCategories()]);
+  const [settings, allCategories] = await Promise.all([getStoreSettings(), getCategories()]);
+  const categories = topLevel(allCategories);
 
   return (
     <html lang={localeTags[lang].html} className={jakarta.variable}>

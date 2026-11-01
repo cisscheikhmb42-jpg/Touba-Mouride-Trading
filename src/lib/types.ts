@@ -5,6 +5,8 @@ export type Category = {
   name_fr: string;
   name_wo: string;
   slug: string;
+  /** Catégorie parente (sous-catégorie), sinon null. */
+  parent_id: string | null;
   description_fr: string | null;
   description_wo: string | null;
   image_url: string | null;

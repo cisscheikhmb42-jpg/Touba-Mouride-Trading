@@ -11,6 +11,7 @@ const fr = {
       "Jallabes, chaussures orthopédiques, marakiss, parfums, Xassaïdes et chapelets. Commandez en ligne et finalisez votre demande sur WhatsApp. Liberté 5, Dakar et Keur Massar.",
   },
   common: {
+    about: "À propos",
     skipToContent: "Aller au contenu",
     home: "Accueil",
     shop: "Boutique",
@@ -64,7 +65,7 @@ const fr = {
     trust: [
       { title: "Commande simple", text: "Composez votre panier, la boutique vous répond sur WhatsApp." },
       { title: "Prix transparents", text: "Prix affichés en FCFA ; ce qui reste à confirmer est indiqué clairement." },
-      { title: "Livraison au Sénégal", text: "Dakar, Keur Massar et autres régions : frais confirmés avant toute commande." },
+      { title: "Livraison partout", text: "Dakar, Keur Massar, régions et international : frais confirmés sur WhatsApp." },
     ],
     emptyCatalogTitle: "Le catalogue arrive bientôt",
     emptyCatalogText:
@@ -116,7 +117,7 @@ const fr = {
     noDescription: "La description détaillée de cet article sera ajoutée prochainement.",
     deliveryTitle: "Livraison",
     deliveryText:
-      "Livraison à Dakar et dans les autres régions du Sénégal. Les frais et délais sont indiqués lorsqu'ils sont connus, sinon confirmés sur WhatsApp.",
+      "Livraison à Dakar, dans les autres régions du Sénégal et à l'international. Les frais et délais sont confirmés sur WhatsApp.",
     similar: "Produits similaires",
     sku: "Référence",
     photoComing: "Photo à venir",
@@ -157,6 +158,9 @@ const fr = {
     apply: "Appliquer",
     emptyCategory: "Aucun produit n'est encore publié dans cette catégorie.",
     otherCategories: "Autres catégories",
+    otherProducts: "Autres modèles",
+    subcategories: "Les parties de cette catégorie",
+    allOfCategory: "Tout voir",
     productsIn: "Produits de la catégorie {name}",
   },
   cart: {
@@ -278,7 +282,11 @@ const fr = {
       },
       {
         q: "Quels sont les frais de livraison ?",
-        a: "Les frais dépendent de votre zone. Lorsqu'ils sont connus, ils sont affichés dans le panier ; sinon, ils vous sont communiqués sur WhatsApp avant toute confirmation.",
+        a: "Les frais dépendent de votre zone et de votre adresse. Ils vous sont communiqués sur WhatsApp avant toute confirmation de commande.",
+      },
+      {
+        q: "Livrez-vous à l'étranger ?",
+        a: "Oui, nous livrons aussi à l'international. Choisissez la zone « International » dans le panier et indiquez votre pays et votre ville : nous vous confirmons les frais et le délai sur WhatsApp.",
       },
       {
         q: "Un article affiche « Prix à confirmer », que faire ?",
@@ -293,6 +301,36 @@ const fr = {
         a: "Les modalités de paiement vous sont précisées par la boutique lors de la confirmation de votre commande sur WhatsApp.",
       },
     ],
+  },
+  aboutPage: {
+    title: "À propos",
+    description:
+      "TOUBA MOURIDE TRADING, boutique d'articles mourides à Liberté 5 (Dakar) et Keur Massar : jallabes, marakiss, parfums, Xassaïdes, chapelets et plus.",
+    eyebrow: "Qui sommes-nous",
+    heading: "Une boutique au service de la communauté mouride",
+    intro:
+      "TOUBA MOURIDE TRADING réunit en un seul endroit les articles et accessoires de l'univers mouride : tenues, chaussures, parfums, Xassaïdes et chapelets. Notre boutique est présente à Liberté 5 (Dakar) et à Keur Massar, et ce site vous permet de découvrir nos articles et de nous envoyer votre demande directement sur WhatsApp.",
+    offerTitle: "Ce que nous proposons",
+    offerText: "Nos articles sont classés par catégorie pour vous aider à trouver ce que vous cherchez.",
+    valuesTitle: "Notre façon de travailler",
+    values: [
+      {
+        title: "Des informations claires",
+        text: "Les prix sont affichés en FCFA lorsqu'ils sont confirmés. Ce qui reste à confirmer est toujours indiqué, sans surprise.",
+      },
+      {
+        title: "Un échange direct",
+        text: "Chaque demande arrive sur notre WhatsApp. Nous vous répondons pour confirmer la disponibilité, les montants et la livraison.",
+      },
+      {
+        title: "Proches de vous",
+        text: "Nous sommes à Liberté 5 (Dakar) et à Keur Massar. Nous livrons partout au Sénégal et à l'international : les frais sont confirmés avec vous sur WhatsApp.",
+      },
+    ],
+    visitTitle: "Où nous trouver",
+    visitText: "Écrivez-nous avant de vous déplacer : nous vous indiquerons comment nous rejoindre.",
+    ctaShop: "Voir la boutique",
+    learnMore: "En savoir plus sur nous",
   },
   contactPage: {
     title: "Contact",

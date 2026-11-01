@@ -6,6 +6,7 @@ import { isLocale, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { paths } from "@/i18n/paths";
 import { getCategories, getProducts, getStoreSettings } from "@/lib/data/catalog";
+import { topLevel } from "@/lib/data/categories";
 import { pick } from "@/lib/types";
 import { whatsappUrl } from "@/lib/whatsapp";
 import { pageMetadata } from "@/lib/seo";
@@ -36,7 +37,8 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
   const { lang } = await params;
   const locale: Locale = isLocale(lang) ? lang : "fr";
   const dict = getDictionary(locale);
-  const [settings, categories, products] = await Promise.all([getStoreSettings(), getCategories(), getProducts()]);
+  const [settings, allCategories, products] = await Promise.all([getStoreSettings(), getCategories(), getProducts()]);
+  const categories = topLevel(allCategories);
 
   const featured = products.filter((p) => p.is_featured).slice(0, 12);
   const latest = products.slice(0, 12); // déjà triés par date d'ajout décroissante
@@ -291,6 +293,9 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
             <h2 className="mt-4 text-3xl font-extrabold tracking-[-0.02em] text-ink sm:text-4xl">{dict.home.brandTitle}</h2>
             <StarFrieze className="mt-5" count={4} tone="ink" />
             <p className="relative mt-6 max-w-2xl text-lg leading-relaxed text-ink">{dict.home.brandText}</p>
+            <Link href={paths.about(locale)} className="relative mt-7 inline-flex items-center gap-2 font-display font-bold text-ink underline decoration-2 underline-offset-4 hover:text-brand-900">
+              {dict.aboutPage.learnMore} <ArrowRight className="size-4" aria-hidden="true" />
+            </Link>
           </Reveal>
           <Reveal delay={120} className="bg-ink p-8 text-white sm:p-12 lg:p-14">
             <h3 className="text-xl font-extrabold">{dict.home.contactTitle}</h3>

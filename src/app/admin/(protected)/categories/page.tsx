@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { requireAdmin } from "@/lib/admin/auth";
+import { adminCategoryOptions } from "@/lib/data/categories";
 import { ActionForm, ConfirmSubmit } from "@/components/admin/action-form";
 import { Checkbox, Field, TextArea } from "@/components/admin/fields";
 import { MediaField } from "@/components/admin/media-field";
@@ -12,6 +13,7 @@ type Cat = {
   name_fr: string;
   name_wo: string;
   slug: string;
+  parent_id: string | null;
   description_fr: string | null;
   description_wo: string | null;
   seo_title_fr: string | null;
@@ -27,7 +29,11 @@ export default async function AdminCategoriesPage() {
   const { supabase } = await requireAdmin();
   const { data, error } = await supabase.from("categories").select("*").order("sort_order");
   if (error) return <p className="text-danger">{error.message}</p>;
-  const categories = (data ?? []) as Cat[];
+  const all = (data ?? []) as Cat[];
+  // Parentes d'abord, chaque sous-catégorie juste sous sa parente.
+  const options = adminCategoryOptions(all);
+  const categories = options.map((o) => all.find((c) => c.id === o.id)!);
+  const parents = all.filter((c) => !c.parent_id);
   return (
     <div className="max-w-4xl space-y-6">
       <h1 className="text-3xl font-extrabold">Catégories</h1>
@@ -37,7 +43,8 @@ export default async function AdminCategoriesPage() {
       {categories.map((c) => (
         <details key={c.id} className="card group p-5">
           <summary className="flex cursor-pointer list-none items-center justify-between gap-3 font-display font-bold [&::-webkit-details-marker]:hidden">
-            <span>
+            <span className={c.parent_id ? "pl-5" : ""}>
+              {c.parent_id && <span className="text-brand-700">↳ </span>}
               {c.name_fr} <span className="text-sm font-normal text-muted">/{c.slug}</span>
             </span>
             <span className={`rounded-full px-2 py-0.5 text-xs ${c.is_active ? "bg-[#e7f5ec] text-success" : "bg-paper text-muted"}`}>
@@ -54,7 +61,7 @@ export default async function AdminCategoriesPage() {
               maxSide={1200}
             />
             <ActionForm action={saveCategory}>
-              <CategoryFields c={c} />
+              <CategoryFields c={c} parents={parents.filter((x) => x.id !== c.id)} />
             </ActionForm>
             <form action={deleteCategory}>
               <input type="hidden" name="id" value={c.id} />
@@ -66,14 +73,14 @@ export default async function AdminCategoriesPage() {
       <section className="card border-2 border-dashed p-5">
         <h2 className="font-display font-bold">Nouvelle catégorie</h2>
         <ActionForm action={saveCategory} submitLabel="Créer la catégorie" className="mt-4">
-          <CategoryFields />
+          <CategoryFields parents={parents} />
         </ActionForm>
       </section>
     </div>
   );
 }
 
-function CategoryFields({ c }: { c?: Cat }) {
+function CategoryFields({ c, parents }: { c?: Cat; parents: Cat[] }) {
   return (
     <>
       {c && <input type="hidden" name="id" value={c.id} />}
@@ -82,6 +89,20 @@ function CategoryFields({ c }: { c?: Cat }) {
         <Field label="Nom (wolof)" name="name_wo" defaultValue={c?.name_wo} />
         <Field label="Slug (URL)" name="slug" defaultValue={c?.slug} />
         <Field label="Ordre d'affichage" name="sort_order" defaultValue={c?.sort_order ?? 0} inputMode="numeric" />
+        <div className="sm:col-span-2">
+          <label htmlFor={`parent-${c?.id ?? "new"}`} className="field-label">
+            Catégorie parente
+          </label>
+          <select id={`parent-${c?.id ?? "new"}`} name="parent_id" defaultValue={c?.parent_id ?? ""} className="field">
+            <option value="">— Aucune (catégorie principale) —</option>
+            {parents.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.name_fr}
+              </option>
+            ))}
+          </select>
+          <p className="mt-1 text-xs text-muted">Choisir une parente pour en faire une partie (sous-catégorie) de celle-ci.</p>
+        </div>
         <TextArea label="Description (français)" name="description_fr" defaultValue={c?.description_fr} rows={3} />
         <TextArea label="Description (wolof)" name="description_wo" defaultValue={c?.description_wo} rows={3} />
         <Field label="Titre SEO (français)" name="seo_title_fr" defaultValue={c?.seo_title_fr} />

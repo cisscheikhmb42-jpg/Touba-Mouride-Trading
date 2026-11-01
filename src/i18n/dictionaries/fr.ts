@@ -158,6 +158,9 @@ const fr = {
     apply: "Appliquer",
     emptyCategory: "Aucun produit n'est encore publié dans cette catégorie.",
     otherCategories: "Autres catégories",
+    otherProducts: "Autres modèles",
+    subcategories: "Les parties de cette catégorie",
+    allOfCategory: "Tout voir",
     productsIn: "Produits de la catégorie {name}",
   },
   cart: {

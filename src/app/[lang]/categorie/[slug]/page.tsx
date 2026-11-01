@@ -7,6 +7,7 @@ import { format, isLocale, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { paths } from "@/i18n/paths";
 import { getCategories, getCategoryBySlug } from "@/lib/data/catalog";
+import { childrenOf, topLevel } from "@/lib/data/categories";
 import { pick } from "@/lib/types";
 import { pageMetadata, truncate } from "@/lib/seo";
 import { Breadcrumbs } from "@/components/seo/breadcrumbs";
@@ -43,7 +44,11 @@ async function CategoryPageContent({ params, searchParams }: PageProps<"/[lang]/
   if (!category) notFound();
   const name = pick(category, "name", locale);
   const description = pick(category, "description", locale);
-  const others = categories.filter((c) => c.id !== category.id);
+  const parent = category.parent_id ? (categories.find((c) => c.id === category.parent_id) ?? null) : null;
+  const others = topLevel(categories).filter((c) => c.id !== category.id && c.id !== parent?.id);
+  // Navigation entre les parties : celles de la catégorie, ou celles de sa parente.
+  const familyRoot = parent ?? category;
+  const family = childrenOf(categories, familyRoot.id);
 
   return (
     <div className="container-page py-8 sm:py-12">
@@ -52,6 +57,7 @@ async function CategoryPageContent({ params, searchParams }: PageProps<"/[lang]/
         items={[
           { label: dict.common.home, href: paths.home(locale) },
           { label: dict.catalog.title, href: paths.shop(locale) },
+          ...(parent ? [{ label: pick(parent, "name", locale), href: paths.category(locale, parent.slug) }] : []),
           { label: name, href: paths.category(locale, category.slug) },
         ]}
       />
@@ -61,6 +67,28 @@ async function CategoryPageContent({ params, searchParams }: PageProps<"/[lang]/
         <StarFrieze className="mt-5" />
         {description && <p className="mt-4 text-lg text-muted">{description}</p>}
       </header>
+      {family.length > 0 && (
+        <nav aria-label={dict.catalog.subcategories} className="-mt-2 mb-8">
+          <ul className="flex flex-wrap gap-2">
+            {[{ id: familyRoot.id, slug: familyRoot.slug, label: dict.catalog.allOfCategory }, ...family.map((c) => ({ id: c.id, slug: c.slug, label: pick(c, "name", locale) }))].map((item) => {
+              const current = item.id === category.id;
+              return (
+                <li key={item.id}>
+                  <Link
+                    href={paths.category(locale, item.slug)}
+                    aria-current={current ? "page" : undefined}
+                    className={`inline-block rounded-xl border px-4 py-2.5 text-sm font-bold transition ${
+                      current ? "border-ink bg-ink text-white" : "border-line bg-white text-ink hover:border-brand-500"
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+      )}
       <h2 className="sr-only">{format(dict.catalog.productsIn, { name })}</h2>
       <Suspense fallback={<GridSkeleton />}>
         <CatalogView

@@ -236,7 +236,10 @@ export async function saveCategory(_: ActionState, fd: FormData): Promise<Action
   const slug = str(fd, "slug") || slugify(nameFr);
   if (!SLUG.test(slug)) return fail("Slug invalide.");
   const sort = int(fd, "sort_order");
+  const parentId = optStr(fd, "parent_id");
+  if (parentId && parentId === id) return fail("Une catégorie ne peut pas être sa propre parente.");
   const record = {
+    parent_id: parentId,
     name_fr: nameFr,
     name_wo: str(fd, "name_wo") || nameFr,
     slug,

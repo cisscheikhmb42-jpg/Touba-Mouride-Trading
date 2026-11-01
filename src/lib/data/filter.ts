@@ -44,11 +44,12 @@ export function hasActiveFilters(f: CatalogFilters): boolean {
   return !!(f.q || f.category || f.size || f.color || f.available || f.min !== null || f.max !== null || f.sort !== "nouveautes");
 }
 
-export function applyFilters(products: Product[], f: CatalogFilters, categoryIdBySlug: Map<string, string>): Product[] {
+/** categoryIdsBySlug : pour chaque slug, la catégorie et ses sous-catégories. */
+export function applyFilters(products: Product[], f: CatalogFilters, categoryIdsBySlug: Map<string, Set<string>>): Product[] {
   const terms = buildSearchTerms(f.q);
-  const categoryId = f.category ? categoryIdBySlug.get(f.category) : undefined;
+  const categoryIds = f.category ? categoryIdsBySlug.get(f.category) : undefined;
   const result = products.filter((p) => {
-    if (f.category && p.category_id !== categoryId) return false;
+    if (f.category && !(p.category_id && categoryIds?.has(p.category_id))) return false;
     if (!matchesSearch(p.search_text, terms)) return false;
     if (f.size && !p.product_variants.some((v) => v.size?.trim() === f.size && v.is_available)) return false;
     if (f.color && !p.product_variants.some((v) => v.color?.trim() === f.color && v.is_available)) return false;

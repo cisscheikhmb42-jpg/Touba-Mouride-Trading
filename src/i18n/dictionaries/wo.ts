@@ -165,6 +165,9 @@ const wo: Dictionary = {
     apply: "Wone",
     emptyCategory: "Amagul benn produit ci xeet bii.",
     otherCategories: "Yeneen xeet",
+    otherProducts: "Yeneen modèle",
+    subcategories: "Xaaj yi ci xeet bii",
+    allOfCategory: "Xool lépp",
     productsIn: "Produit yu xeet {name}",
   },
   cart: {

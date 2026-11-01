@@ -7,6 +7,7 @@ import { getDictionary } from "@/i18n/dictionaries";
 import { paths } from "@/i18n/paths";
 import { pageMetadata } from "@/lib/seo";
 import { getCategories, getStoreSettings } from "@/lib/data/catalog";
+import { topLevel } from "@/lib/data/categories";
 import { pick } from "@/lib/types";
 import { whatsappUrl } from "@/lib/whatsapp";
 import { Breadcrumbs } from "@/components/seo/breadcrumbs";
@@ -28,7 +29,8 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/a-propos"
   const locale: Locale = isLocale(lang) ? lang : "fr";
   const dict = getDictionary(locale);
   const t = dict.aboutPage;
-  const [settings, categories] = await Promise.all([getStoreSettings(), getCategories()]);
+  const [settings, allCategories] = await Promise.all([getStoreSettings(), getCategories()]);
+  const categories = topLevel(allCategories);
 
   return (
     <>

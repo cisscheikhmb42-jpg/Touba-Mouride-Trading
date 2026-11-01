@@ -6,6 +6,7 @@ import { isLocale, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { paths } from "@/i18n/paths";
 import { getCategories, getProducts, getStoreSettings } from "@/lib/data/catalog";
+import { topLevel } from "@/lib/data/categories";
 import { pick } from "@/lib/types";
 import { whatsappUrl } from "@/lib/whatsapp";
 import { pageMetadata } from "@/lib/seo";
@@ -36,7 +37,8 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
   const { lang } = await params;
   const locale: Locale = isLocale(lang) ? lang : "fr";
   const dict = getDictionary(locale);
-  const [settings, categories, products] = await Promise.all([getStoreSettings(), getCategories(), getProducts()]);
+  const [settings, allCategories, products] = await Promise.all([getStoreSettings(), getCategories(), getProducts()]);
+  const categories = topLevel(allCategories);
 
   const featured = products.filter((p) => p.is_featured).slice(0, 12);
   const latest = products.slice(0, 12); // déjà triés par date d'ajout décroissante

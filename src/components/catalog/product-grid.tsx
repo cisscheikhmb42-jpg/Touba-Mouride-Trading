@@ -3,12 +3,25 @@ import type { Dictionary } from "@/i18n/dictionaries";
 import type { Product } from "@/lib/types";
 import { ProductCard } from "./product-card";
 
-export function ProductGrid({ products, locale, dict }: { products: Product[]; locale: Locale; dict: Dictionary }) {
+const GRID = "grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 xl:grid-cols-4";
+
+/** stripPrefix : nom de la partie affichée au-dessus, retiré des noms d'articles. */
+export function ProductGrid({
+  products,
+  locale,
+  dict,
+  stripPrefix,
+}: {
+  products: Product[];
+  locale: Locale;
+  dict: Dictionary;
+  stripPrefix?: string;
+}) {
   return (
-    <ul className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
+    <ul className={GRID}>
       {products.map((p, i) => (
         <li key={p.id}>
-          <ProductCard product={p} locale={locale} dict={dict} priority={i < 2} />
+          <ProductCard product={p} locale={locale} dict={dict} priority={i < 2} stripPrefix={stripPrefix} />
         </li>
       ))}
     </ul>
@@ -17,7 +30,7 @@ export function ProductGrid({ products, locale, dict }: { products: Product[]; l
 
 export function GridSkeleton() {
   return (
-    <ul className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3" aria-hidden="true">
+    <ul className={GRID} aria-hidden="true">
       {Array.from({ length: 6 }, (_, i) => (
         <li key={i} className="overflow-hidden rounded-[var(--radius-card)] border border-line bg-white">
           <div className="skeleton aspect-[4/5]" />

@@ -7,7 +7,6 @@ import { format, isLocale, type Locale } from "@/i18n/config";
 import { getDictionary, type Dictionary } from "@/i18n/dictionaries";
 import { paths } from "@/i18n/paths";
 import Image from "next/image";
-import { ArrowUpRight } from "lucide-react";
 import { getCategories, getCategoryBySlug, getProducts } from "@/lib/data/catalog";
 import { categoryCover, categoryMinPrice, childrenOf, productsIn, topLevel } from "@/lib/data/categories";
 import { formatFCFA } from "@/lib/format";
@@ -72,7 +71,7 @@ async function CategoryPageContent({ params, searchParams }: PageProps<"/[lang]/
         {description && <p className="mt-4 text-lg text-muted">{description}</p>}
       </header>
       {family.length > 0 && (
-        <Suspense fallback={<div className="mb-10 h-64" aria-hidden="true" />}>
+        <Suspense fallback={<div className="mb-8 h-[4.5rem]" aria-hidden="true" />}>
           <SubcategoryCards
             searchParams={searchParams}
             locale={locale}
@@ -80,7 +79,7 @@ async function CategoryPageContent({ params, searchParams }: PageProps<"/[lang]/
             categories={categories}
             family={family}
             currentId={category.id}
-            parentSlug={parent?.slug ?? null}
+            root={familyRoot}
           />
         </Suspense>
       )}
@@ -104,7 +103,7 @@ async function CategoryPageContent({ params, searchParams }: PageProps<"/[lang]/
               <li key={c.id}>
                 <Link
                   href={paths.category(locale, c.slug)}
-                  className="inline-block rounded-full border border-line bg-white px-4 py-2.5 text-sm font-semibold transition hover:border-ink"
+                  className="inline-block rounded-xl border border-line bg-white px-4 py-2.5 text-sm font-semibold transition hover:border-brand-500"
                 >
                   {pick(c, "name", locale)}
                 </Link>
@@ -129,7 +128,7 @@ async function SubcategoryCards({
   categories,
   family,
   currentId,
-  parentSlug,
+  root,
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
   locale: Locale;
@@ -137,54 +136,44 @@ async function SubcategoryCards({
   categories: Category[];
   family: Category[];
   currentId: string;
-  parentSlug: string | null;
+  root: Category;
 }) {
   await searchParams;
   const products = await getProducts();
+  const tabs = [
+    { id: root.id, slug: root.slug, label: dict.catalog.allOfCategory, cover: categoryCover(categories, products, root), min: categoryMinPrice(categories, products, root.id), count: productsIn(categories, products, root.id).length },
+    ...family.map((c) => ({
+      id: c.id,
+      slug: c.slug,
+      label: pick(c, "name", locale),
+      cover: categoryCover(categories, products, c),
+      min: categoryMinPrice(categories, products, c.id),
+      count: productsIn(categories, products, c.id).length,
+    })),
+  ];
   return (
-    <nav aria-label={dict.catalog.subcategories} className="-mt-2 mb-10">
-      {parentSlug && (
-        <Link href={paths.category(locale, parentSlug)} className="mb-4 inline-block rounded-xl border border-line bg-white px-4 py-2.5 text-sm font-bold transition hover:border-brand-500">
-          {dict.catalog.allOfCategory}
-        </Link>
-      )}
-      <ul className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
-        {family.map((c) => {
-          const current = c.id === currentId;
-          const cover = categoryCover(categories, products, c);
-          const min = categoryMinPrice(categories, products, c.id);
-          const count = productsIn(categories, products, c.id).length;
+    <nav aria-label={dict.catalog.subcategories} className="-mx-4 mb-8 px-4 sm:mx-0 sm:px-0">
+      <ul className="scroller !gap-3 pb-1">
+        {tabs.map((tab) => {
+          const current = tab.id === currentId;
           return (
-            <li key={c.id}>
+            <li key={tab.id} className="shrink-0">
               <Link
-                href={paths.category(locale, c.slug)}
+                href={paths.category(locale, tab.slug)}
                 aria-current={current ? "page" : undefined}
-                className={`group block overflow-hidden rounded-[1.5rem] border bg-white transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-lift)] ${
-                  current ? "border-ink ring-2 ring-ink" : "border-line"
+                className={`group flex items-center gap-3 rounded-2xl border p-2 pr-5 transition ${
+                  current ? "border-ink bg-ink text-white" : "border-line bg-white text-ink hover:border-brand-500"
                 }`}
               >
-                <span className="relative block aspect-[4/3] bg-brand-50">
-                  {cover && (
-                    <Image
-                      unoptimized={isLocalImage(cover)}
-                      src={cover}
-                      alt=""
-                      fill
-                      sizes="(min-width: 1024px) 28vw, 50vw"
-                      quality={70}
-                      className="object-cover object-top transition duration-700 group-hover:scale-105"
-                    />
+                <span className="relative block size-14 shrink-0 overflow-hidden rounded-xl bg-brand-50">
+                  {tab.cover && (
+                    <Image unoptimized={isLocalImage(tab.cover)} src={tab.cover} alt="" fill sizes="56px" quality={70} className="object-cover object-top" />
                   )}
                 </span>
-                <span className="flex items-end justify-between gap-3 p-4 sm:p-5">
-                  <span className="min-w-0">
-                    <span className="block font-display text-base leading-tight font-extrabold sm:text-lg">{pick(c, "name", locale)}</span>
-                    <span className="mt-1.5 block text-sm font-semibold text-brand-800">
-                      {min !== null ? `${dict.product.from} ${formatFCFA(min)}` : format(dict.catalog.results, { n: count })}
-                    </span>
-                  </span>
-                  <span aria-hidden="true" className="grid size-9 shrink-0 place-items-center rounded-xl bg-ink text-white transition group-hover:bg-brand-700">
-                    <ArrowUpRight className="size-4" />
+                <span className="min-w-0">
+                  <span className="block font-display text-sm leading-tight font-extrabold whitespace-nowrap">{tab.label}</span>
+                  <span className={`mt-1 block text-xs font-semibold whitespace-nowrap ${current ? "text-brand-200" : "text-brand-800"}`}>
+                    {tab.min !== null ? `${dict.product.from} ${formatFCFA(tab.min)}` : format(dict.catalog.results, { n: tab.count })}
                   </span>
                 </span>
               </Link>

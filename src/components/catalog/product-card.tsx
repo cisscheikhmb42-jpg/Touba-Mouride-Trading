@@ -19,13 +19,18 @@ export function ProductCard({
   locale,
   dict,
   priority = false,
+  stripPrefix,
 }: {
   product: Product;
   locale: Locale;
   dict: Dictionary;
   priority?: boolean;
+  stripPrefix?: string;
 }) {
   const name = pick(product, "name", locale);
+  // Sous le titre « Jallabe avec capuche Jezner », « … Jezner — Vert olive » devient « Vert olive ».
+  const [head, ...rest] = name.split(" — ");
+  const shortName = stripPrefix && rest.length && stripPrefix.startsWith(head) ? rest.join(" — ") : name;
   const image = product.product_images[0];
   const price = displayPrice(product);
   const state = variantStock(product, null);
@@ -57,8 +62,12 @@ export function ProductCard({
       </Link>
       <div className="flex flex-1 flex-col gap-2 p-4">
         <h3 className="font-display text-[0.95rem] leading-snug font-bold text-ink">
-          <Link href={href} className="after:absolute after:inset-0 after:content-[''] focus-visible:outline-none">
-            {name}
+          <Link
+            href={href}
+            aria-label={shortName !== name ? name : undefined}
+            className="after:absolute after:inset-0 after:content-[''] focus-visible:outline-none"
+          >
+            {shortName}
           </Link>
         </h3>
         {product.product_variants.some((v) => v.is_available) && (

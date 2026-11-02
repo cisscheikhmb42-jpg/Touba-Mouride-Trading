@@ -59,3 +59,10 @@ export function categoryMinPrice(categories: Category[], products: Product[], id
     .filter((a): a is number => a !== null);
   return prices.length ? Math.min(...prices) : null;
 }
+
+/** Le prix est-il le même pour tous les produits de la catégorie ? */
+export function categoryHasSinglePrice(categories: Category[], products: Product[], id: string): boolean {
+  const list = productsIn(categories, products, id);
+  const prices = list.map((p) => displayPrice(p));
+  return prices.length > 0 && prices.every((p) => p.amount !== null && !p.from && p.amount === prices[0].amount);
+}

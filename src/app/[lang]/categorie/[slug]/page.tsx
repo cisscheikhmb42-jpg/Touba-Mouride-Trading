@@ -8,7 +8,7 @@ import { getDictionary, type Dictionary } from "@/i18n/dictionaries";
 import { paths } from "@/i18n/paths";
 import Image from "next/image";
 import { getCategories, getCategoryBySlug, getProducts } from "@/lib/data/catalog";
-import { categoryCover, categoryMinPrice, childrenOf, productsIn, topLevel } from "@/lib/data/categories";
+import { categoryCover, categoryHasSinglePrice, categoryMinPrice, childrenOf, productsIn, topLevel } from "@/lib/data/categories";
 import { formatFCFA } from "@/lib/format";
 import { isLocalImage } from "@/lib/images";
 import { pick, type Category } from "@/lib/types";
@@ -146,6 +146,7 @@ async function SubcategoryCards({
     label: pick(c, "name", locale),
     cover: categoryCover(categories, products, c),
     min: categoryMinPrice(categories, products, c.id),
+    single: categoryHasSinglePrice(categories, products, c.id),
     count: productsIn(categories, products, c.id).length,
   }));
   // « Tout voir » : une photo que les onglets des parties n'utilisent pas déjà.
@@ -161,7 +162,9 @@ async function SubcategoryCards({
       slug: root.slug,
       label: dict.catalog.allOfCategory,
       cover: rootCover,
-      min: categoryMinPrice(categories, products, root.id),
+      // Pas de prix ici : « Dès … » à côté de la photo d'un article plus cher prête à confusion.
+      min: null,
+      single: false,
       count: rootProducts.length,
     },
     ...parts,
@@ -188,7 +191,7 @@ async function SubcategoryCards({
                 <span className="min-w-0">
                   <span className="block font-display text-sm leading-tight font-extrabold whitespace-nowrap">{tab.label}</span>
                   <span className={`mt-1 block text-xs font-semibold whitespace-nowrap ${current ? "text-brand-200" : "text-brand-800"}`}>
-                    {tab.min !== null ? `${dict.product.from} ${formatFCFA(tab.min)}` : format(dict.catalog.results, { n: tab.count })}
+                    {tab.min === null ? format(dict.catalog.results, { n: tab.count }) : tab.single ? formatFCFA(tab.min) : `${dict.product.from} ${formatFCFA(tab.min)}`}
                   </span>
                 </span>
               </Link>

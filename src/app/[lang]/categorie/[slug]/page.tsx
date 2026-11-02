@@ -140,16 +140,31 @@ async function SubcategoryCards({
 }) {
   await searchParams;
   const products = await getProducts();
+  const parts = family.map((c) => ({
+    id: c.id,
+    slug: c.slug,
+    label: pick(c, "name", locale),
+    cover: categoryCover(categories, products, c),
+    min: categoryMinPrice(categories, products, c.id),
+    count: productsIn(categories, products, c.id).length,
+  }));
+  // « Tout voir » : une photo que les onglets des parties n'utilisent pas déjà.
+  const used = new Set(parts.map((t) => t.cover));
+  const rootProducts = productsIn(categories, products, root.id);
+  const rootCover =
+    root.image_url ??
+    rootProducts.flatMap((p) => p.product_images.map((i) => i.image_url)).find((url) => !used.has(url)) ??
+    categoryCover(categories, products, root);
   const tabs = [
-    { id: root.id, slug: root.slug, label: dict.catalog.allOfCategory, cover: categoryCover(categories, products, root), min: categoryMinPrice(categories, products, root.id), count: productsIn(categories, products, root.id).length },
-    ...family.map((c) => ({
-      id: c.id,
-      slug: c.slug,
-      label: pick(c, "name", locale),
-      cover: categoryCover(categories, products, c),
-      min: categoryMinPrice(categories, products, c.id),
-      count: productsIn(categories, products, c.id).length,
-    })),
+    {
+      id: root.id,
+      slug: root.slug,
+      label: dict.catalog.allOfCategory,
+      cover: rootCover,
+      min: categoryMinPrice(categories, products, root.id),
+      count: rootProducts.length,
+    },
+    ...parts,
   ];
   return (
     <nav aria-label={dict.catalog.subcategories} className="-mx-4 mb-8 px-4 sm:mx-0 sm:px-0">
